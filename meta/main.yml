@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: docker
+  role_name: kubernetes
   author: edward
   description: Docker for Linux.
   company: "Philips"
