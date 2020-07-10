@@ -1,0 +1,36 @@
+- name: Ensure dependencies are installed
+  apt:
+    name:
+      - apt-transport-https
+      - curl
+    state: present
+  become: true
+
+- name: Add Kubernetes’s official GPG key
+  shell: >
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+  args:
+    warn: false
+  become: true
+
+- name: Add Kubernetes repository
+  apt_repository:
+    repo: "{{ kubernetes_apt_repository }}"
+    state: present
+    update_cache: true
+  become: true
+
+- name: Install Kubernetes
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+  become: true
+
+- name: Ensure kubelet is started and enabled at boot
+  systemd:
+    name: kubelet
+    state: started
+    enabled: true
