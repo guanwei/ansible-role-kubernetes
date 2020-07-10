@@ -4,7 +4,7 @@ dependencies: []
 galaxy_info:
   role_name: kubernetes
   author: edward
-  description: Docker for Linux.
+  description: Kubernetes for Linux.
   company: "Philips"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
@@ -16,4 +16,5 @@ galaxy_info:
         - focal
   galaxy_tags:
     - containers
-    - docker
+    - kubernetes
+    - k8s
