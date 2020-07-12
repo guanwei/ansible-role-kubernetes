@@ -6,6 +6,7 @@ kubernetes_role: master
 
 # kubernetes_version: "v1.18.0"
 # kubernetes_apiserver_advertise_address: "192.168.12.12"
+# kubernetes_ignore_preflight_errors: "all"
 kubernetes_kubeadm_init_extra_opts: ""
 kubernetes_join_command_extra_opts: ""
 

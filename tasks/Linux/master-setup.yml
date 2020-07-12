@@ -2,13 +2,16 @@
 - name: Initialize Kubernetes master with kubeadm init
   command: >
     kubeadm init
-    --pod-network-cidr={{ kubernetes_pod_network.cidr }}
-    {% if kubernetes_apiserver_advertise_address is defined %}
-    --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
-    {% endif %}
     {% if kubernetes_version is defined %}
     --kubernetes-version {{ kubernetes_version }}
     {% endif %}
+    {% if kubernetes_apiserver_advertise_address is defined %}
+    --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
+    {% endif %}
+    {% kubernetes_ignore_preflight_errors is defined %}
+    --ignore-preflight-errors={{ kubernetes_ignore_preflight_errors }}
+    {% endif %}
+    --pod-network-cidr={{ kubernetes_pod_network.cidr }}
     {{ kubernetes_kubeadm_init_extra_opts }}
   register: kubeadmin_init
   when: not kubernetes_init_stat.stat.exists
