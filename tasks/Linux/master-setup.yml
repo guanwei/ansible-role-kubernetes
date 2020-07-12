@@ -32,8 +32,8 @@
   copy:
     src: /etc/kubernetes/admin.conf
     dest: ~/.kube/config
-    owner: {{ ansible_user_uid }}
-    group: {{ ansible_user_gid }}
+    owner: "{{ ansible_user_uid }}"
+    group: "{{ ansible_user_gid }}"
     remote_src: yes
 
 - name: Configure Flannel networking
