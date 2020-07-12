@@ -17,4 +17,28 @@
   become: true
   when: not kubernetes_init_stat.stat.exists
 
-- debug: msg="{{ kubeadmin_init }}"
+- name: Print the init output to screen
+  debug:
+    var: kubeadmin_init.stdout
+    verbosity: 2
+  when: not kubernetes_init_stat.stat.exists
+
+- name: Ensure .kube directory exists
+  file:
+    path: ~/.kube
+    state: directory
+  become: true
+
+- name: Symlink the kubectl admin.conf to ~/.kube/conf
+  file:
+    src: /etc/kubernetes/admin.conf
+    dest: ~/.kube/config
+    state: link
+  become: true
+
+- name: Configure Flannel networking
+  command: kubectl apply -f {{ kubernetes_flannel_manifest_file }}
+  register: flannel_result
+  changed_when: "'created' in flannel_result.stdout"
+  become: true
+  when: kubernetes_pod_network.cni == 'flannel'

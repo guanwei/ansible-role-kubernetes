@@ -12,7 +12,7 @@
 #     msg: "the size of total Memory {{ (ansible_memtotal_mb / 1000) | round }} is less than the required 2GB"
 
 - name: Disable Swap
-  shell: swapoff -a
+  command: swapoff -a
   become: true
 
 - name: Comment Swap entries in /etc/fstab
@@ -22,18 +22,18 @@
     replace: '# \1'
   become: true
 
-# - name: Copy Docker daemon config file
-#   template:
-#     src: daemon.json.j2
-#     dest: /etc/docker/daemon.json
-#     owner: root
-#     group: root
-#     mode: 0644
-#   become: true
+- name: Copy Docker daemon config file
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  become: true
 
-# - name: Restart Docker
-#   systemd:
-#     name: docker
-#     state: restarted
-#     daemon_reload: true
-#   become: true
+- name: Restart Docker
+  systemd:
+    name: docker
+    state: restarted
+    daemon_reload: true
+  become: true
