@@ -8,8 +8,8 @@
 - name: Check the size of total Memory
   assert:
     that:
-      - ansible_memtotal_mb / 1024 >= 2
-    msg: "the size of total Memory {{ ansible_memtotal_mb / 1024 }} is less than the required 2GB"
+      - ansible_memtotal_mb / 1000 >= 2
+    msg: "the size of total Memory {{ ansible_memtotal_mb / 1000 }} is less than the required 2GB"
 
 - name: Disable Swap
   shell: swapoff -a
