@@ -14,6 +14,7 @@
     --pod-network-cidr={{ kubernetes_pod_network.cidr }}
     {{ kubernetes_kubeadm_init_extra_opts }}
   register: kubeadmin_init
+  become: true
   when: not kubernetes_init_stat.stat.exists
 
 - debug: msg="{{ kubeadmin_init }}"
