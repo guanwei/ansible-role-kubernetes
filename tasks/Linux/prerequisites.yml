@@ -1,4 +1,10 @@
 ---
+- name: Check the number of available CPUs
+  assert:
+    that:
+      - ansible_processor_vcpus < 3
+    msg: "the number of available CPUs {{ ansible_processor_vcpus }} is less than the required 2"
+
 - name: Disable Swap
   shell: swapoff -a
   become: true
@@ -8,10 +14,4 @@
     path: /etc/fstab
     regexp: '(^/.* swap .*)'
     replace: '# \1'
-  become: true
-
-- name: mount all
-  command: mount -a
-  args:
-    warn: no
   become: true
