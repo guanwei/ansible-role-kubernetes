@@ -21,7 +21,7 @@
     update_cache: true
   become: true
 
-- name: Install Kubernetes
+- name: Install Kubernetes packages
   apt:
     name:
       - kubelet
