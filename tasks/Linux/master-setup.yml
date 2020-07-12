@@ -40,5 +40,17 @@
   command: kubectl apply -f {{ kubernetes_flannel_manifest_file }}
   register: flannel_result
   changed_when: "'created' in flannel_result.stdout"
-  become: true
   when: kubernetes_pod_network.cni == 'flannel'
+  become: true
+
+- name: Configure Calico networking.
+  command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
+  register: calico_result
+  changed_when: "'created' in calico_result.stdout"
+  when: kubernetes_pod_network.cni == 'calico'
+  become: true
+
+- name: Allow pods on master node (if configured)
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  when: kubernetes_allow_pods_on_master | bool
+  become: true
