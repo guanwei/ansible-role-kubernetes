@@ -35,6 +35,7 @@
     owner: "{{ ansible_user_uid }}"
     group: "{{ ansible_user_gid }}"
     remote_src: yes
+  become: true
 
 - name: Configure Flannel networking
   command: kubectl apply -f {{ kubernetes_flannel_manifest_file }}
