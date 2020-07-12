@@ -8,7 +8,7 @@
     {% if kubernetes_apiserver_advertise_address is defined %}
     --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
     {% endif %}
-    {% kubernetes_ignore_preflight_errors is defined %}
+    {% if kubernetes_ignore_preflight_errors is defined %}
     --ignore-preflight-errors={{ kubernetes_ignore_preflight_errors }}
     {% endif %}
     --pod-network-cidr={{ kubernetes_pod_network.cidr }}
