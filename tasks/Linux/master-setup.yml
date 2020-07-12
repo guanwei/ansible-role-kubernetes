@@ -27,18 +27,17 @@
   file:
     path: ~/.kube
     state: directory
-  become: true
 
-- name: Symlink the kubectl admin.conf to ~/.kube/conf
-  file:
+- name: Copy the kubectl admin.conf to ~/.kube/conf
+  copy:
     src: /etc/kubernetes/admin.conf
     dest: ~/.kube/config
-    state: link
-  become: true
+    owner: {{ ansible_user_uid }}
+    group: {{ ansible_user_gid }}
+    remote_src: yes
 
 - name: Configure Flannel networking
   command: kubectl apply -f {{ kubernetes_flannel_manifest_file }}
   register: flannel_result
   changed_when: "'created' in flannel_result.stdout"
-  become: true
   when: kubernetes_pod_network.cni == 'flannel'
