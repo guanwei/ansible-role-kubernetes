@@ -1,8 +1,7 @@
 ---
 - name: Check the number of available CPUs
   assert:
-    that:
-      - ansible_processor_vcpus < 3
+    that: ansible_processor_vcpus > 2
     msg: "the number of available CPUs {{ ansible_processor_vcpus }} is less than the required 2"
 
 - name: Disable Swap
