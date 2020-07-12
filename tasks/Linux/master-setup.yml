@@ -32,8 +32,8 @@
   copy:
     src: /etc/kubernetes/admin.conf
     dest: ~/.kube/config
-    owner: "{{ ansible_user_uid }}"
-    group: "{{ ansible_user_gid }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     remote_src: yes
   become: true
 
