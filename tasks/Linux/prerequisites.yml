@@ -21,3 +21,13 @@
     regexp: '(^/.* swap .*)'
     replace: '# \1'
   become: true
+
+- name: Copy Docker daemon config file
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart docker
+  become: true
