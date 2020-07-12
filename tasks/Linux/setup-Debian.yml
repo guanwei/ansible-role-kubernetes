@@ -29,9 +29,3 @@
       - kubectl
     state: present
   become: true
-
-- name: Ensure kubelet is started and enabled at boot
-  systemd:
-    name: kubelet
-    state: started
-    enabled: true

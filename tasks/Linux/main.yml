@@ -12,8 +12,6 @@
     path: /etc/kubernetes/admin.conf
   register: kubernetes_init_stat
 
-- debug: msg="{{ kubernetes_init_stat }}"
-
 # Set up master.
 - include_tasks: master-setup.yml
   when: kubernetes_role == 'master'

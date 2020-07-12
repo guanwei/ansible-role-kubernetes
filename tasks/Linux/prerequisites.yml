@@ -1,15 +1,15 @@
 ---
-- name: Check the number of available CPUs
-  assert:
-    that:
-      - ansible_processor_vcpus >= 2
-    msg: "the number of available CPUs {{ ansible_processor_vcpus }} is less than the required 2"
+# - name: Check the number of available CPUs
+#   assert:
+#     that:
+#       - ansible_processor_vcpus >= 2
+#     msg: "the number of available CPUs {{ ansible_processor_vcpus }} is less than the required 2"
 
-- name: Check the size of total Memory
-  assert:
-    that:
-      - (ansible_memtotal_mb / 1000) | round >= 2
-    msg: "the size of total Memory {{ (ansible_memtotal_mb / 1000) | round }} is less than the required 2GB"
+# - name: Check the size of total Memory
+#   assert:
+#     that:
+#       - (ansible_memtotal_mb / 1000) | round >= 2
+#     msg: "the size of total Memory {{ (ansible_memtotal_mb / 1000) | round }} is less than the required 2GB"
 
 - name: Disable Swap
   shell: swapoff -a
@@ -22,12 +22,18 @@
     replace: '# \1'
   become: true
 
-- name: Copy Docker daemon config file
-  template:
-    src: daemon.json.j2
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart docker
-  become: true
+# - name: Copy Docker daemon config file
+#   template:
+#     src: daemon.json.j2
+#     dest: /etc/docker/daemon.json
+#     owner: root
+#     group: root
+#     mode: 0644
+#   become: true
+
+# - name: Restart Docker
+#   systemd:
+#     name: docker
+#     state: restarted
+#     daemon_reload: true
+#   become: true
