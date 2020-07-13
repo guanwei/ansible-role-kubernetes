@@ -15,13 +15,13 @@
     {{ kubernetes_kubeadm_init_extra_opts }}
   register: kubeadmin_init
   become: true
-  when: not kubernetes_init_stat.stat.exists
+  when: kubernetes_init_stat | bool
 
 - name: Print the init output to screen
   debug:
     var: kubeadmin_init.stdout
     verbosity: 2
-  when: kubeadmin_init | bool
+  when: kubernetes_init_stat | bool
 
 - name: Ensure .kube directory exists
   file:
@@ -54,5 +54,5 @@
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   when:
     - kubernetes_allow_pods_on_master | bool
-    - kubeadmin_init | bool
+    - kubernetes_init_stat | bool
   become: true
