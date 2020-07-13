@@ -18,12 +18,8 @@
   when: not kubernetes_init_stat.stat.exists
 
 - name: Print the init output to screen
-  debug: msg="{{ kubeadmin_init }}"
-
-- name: Print the init output to screen
   debug:
-    var: kubeadmin_init.stdout
-    verbosity: 2
+    msg: "{{ kubeadmin_init.stdout_lines }}"
   when: not kubernetes_init_stat.stat.exists
 
 - name: Ensure .kube directory exists
