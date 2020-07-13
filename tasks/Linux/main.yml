@@ -8,12 +8,10 @@
   when: ansible_os_family == 'Debian'
 
 - name: Check if Kubernetes has already been initialized
-  shell: test -e /etc/kubernetes/admin.conf && echo true || echo false
+  raw: test -e /etc/kubernetes/admin.conf && echo true || echo false
   changed_when: false
   register: kubernetes_init_stat
 
-- debug: msg="{{ kubernetes_init_stat }}"
-
 # Set up master.
-# - include_tasks: master-setup.yml
-#   when: kubernetes_role == 'master'
+- include_tasks: master-setup.yml
+  when: kubernetes_role == 'master'
