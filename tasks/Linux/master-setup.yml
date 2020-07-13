@@ -15,13 +15,13 @@
     {{ kubernetes_kubeadm_init_extra_opts }}
   register: kubeadmin_init
   become: true
-  when: not kubernetes_init_stat
+  when: not kubernetes_init_stat.stat.exists
 
 - name: Print the init output to screen
   debug:
     var: kubeadmin_init.stdout
     verbosity: 2
-  when: not kubernetes_init_stat
+  when: not kubernetes_init_stat.stat.exists
 
 - name: Ensure .kube directory exists
   file:
@@ -43,7 +43,7 @@
   when: kubernetes_pod_network.cni == 'flannel'
   become: true
 
-- name: Configure Calico networking.
+- name: Configure Calico networking
   command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
   register: calico_result
   changed_when: "'created' in calico_result.stdout"
@@ -54,5 +54,5 @@
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   when:
     - kubernetes_allow_pods_on_master | bool
-    - not kubernetes_init_stat
+    - not kubernetes_init_stat.stat.exists
   become: true
