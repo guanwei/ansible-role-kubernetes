@@ -21,7 +21,7 @@
   debug:
     var: kubeadmin_init.stdout
     verbosity: 2
-  when: kubeadmin_init
+  when: kubeadmin_init | bool
 
 - name: Ensure .kube directory exists
   file:
@@ -52,5 +52,7 @@
 
 - name: Allow pods on master node (if configured)
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
-  when: kubernetes_allow_pods_on_master | bool
+  when:
+    - kubernetes_allow_pods_on_master | bool
+    - kubeadmin_init | bool
   become: true
