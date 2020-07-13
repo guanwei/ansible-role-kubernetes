@@ -13,7 +13,7 @@
   register: kubernetes_init_stat
 
 - set_fact:
-  kubernetes_init_stat: "{{ kubernetes_init_stat.stat.exists }}"
+    kubernetes_init_stat: "{{ kubernetes_init_stat.stat.exists }}"
 
 # Set up master.
 - include_tasks: master-setup.yml
