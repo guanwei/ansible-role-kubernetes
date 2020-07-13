@@ -21,7 +21,7 @@
   debug:
     var: kubeadmin_init.stdout
     verbosity: 2
-  when: not kubernetes_init_stat.stat.exists
+  when: kubeadmin_init
 
 - name: Ensure .kube directory exists
   file:
