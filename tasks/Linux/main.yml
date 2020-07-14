@@ -1,10 +1,10 @@
 ---
-- include_tasks: prerequisites.yml
+- import_tasks: prerequisites.yml
 
-- include_tasks: setup-RedHat.yml
+- import_tasks: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
-- include_tasks: setup-Debian.yml
+- import_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
 - name: Check if Kubernetes has already been initialized
@@ -13,5 +13,5 @@
   register: kubernetes_init_stat
 
 # Set up master.
-- include_tasks: master-setup.yml
+- import_tasks: master-setup.yml
   when: kubernetes_role == 'master'
