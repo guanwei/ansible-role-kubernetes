@@ -14,8 +14,8 @@
   delay: 2
 
 - name: Update flannel manifest file
-  lineinfile:
-    path: "/tmp/{{ kubernetes_flannel_manifest_file | basename }}"
-    regexp: '^(\s*)- --iface=.*'
-    insertafter: '^(\s*)- --kube-subnet-mgr'
-    line: '\1- --iface={{ iface_result.stdout }}'
+  shell: >
+    grep -q '^\s*- --iface=' /tmp/{{ kubernetes_flannel_manifest_file | basename }} &&
+    sed -i "s|^\(\s*\)- --iface=.*|\1- --iface=$iface|g" /tmp/{{ kubernetes_flannel_manifest_file | basename }} ||
+    sed -i '/^\(\s*\)- --kube-subnet-mgr/a \
+      - --iface='$iface /tmp/{{ kubernetes_flannel_manifest_file | basename }}
