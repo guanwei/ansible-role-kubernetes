@@ -35,11 +35,20 @@
     state: link
   become: true
 
+# 如果Node有多个网卡的话，参考flannel issues 39701，
+# 目前需要在kube-flannel.yml中使用--iface参数指定集群主机内网网卡的名称，否则可能会出现dns无法解析。
+- import_tasks: config-flannel.yml
+  when:
+    - kubernetes_pod_network.cni == 'flannel'
+    - kubernetes_apiserver_advertise_address is defined
+
 - name: Configure Flannel networking
   command: kubectl apply -f {{ kubernetes_flannel_manifest_file }}
   register: flannel_result
   changed_when: "'created' in flannel_result.stdout"
-  when: kubernetes_pod_network.cni == 'flannel'
+  when:
+    - kubernetes_pod_network.cni == 'flannel'
+    - kubernetes_apiserver_advertise_address is not defined
   become: true
 
 - name: Configure Calico networking
@@ -66,8 +75,6 @@
   changed_when: false
   register: helm_current_version
   when: helm_is_installed.stat.exists
-
-- debug: msg="{{ helm_current_version.stdout.split('.')[0] }}"
 
 - import_tasks: helm_init.yml
   when: helm_current_version.stdout.split('.')[0] == 'v2'

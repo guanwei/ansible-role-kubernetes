@@ -1,0 +1,21 @@
+---
+- name: Get interface name of apiserver advertise address
+  shell: ifconfig | grep -B1 "inet addr:{{ kubernetes_apiserver_advertise_address }}" | awk '$1!="inet" && $1!="--" {print $1}'
+  changed_when: false
+  register: iface_result
+
+- name: Download flannel manifest file
+  get_url:
+    url: "{{ kubernetes_flannel_manifest_file }}"
+    dest: "/tmp/{{ kubernetes_flannel_manifest_file | basename }}"
+  register: download_file
+  until: download_file is succeeded
+  retries: 3
+  delay: 2
+
+- name: Update flannel manifest file
+  lineinfile:
+    path: "/tmp/{{ kubernetes_flannel_manifest_file | basename }}"
+    regexp: '^\(\s*\)- --iface=.*'
+    insertafter: '^\(\s*\)- --kube-subnet-mgr'
+    line: '\1- --iface={{ iface_result.stdout }}'
