@@ -30,14 +30,16 @@
     warn: false
   become: true
 
-- name: Setup kubeconfig for current user
+- name: Setup kubeconfig for current user (not root user)
   shell: |
     mkdir -p $HOME/.kube
     sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
   args:
     warn: false
-  when: set_kubeconfig_for_current_user | bool
+  when:
+    - set_kubeconfig_for_current_user | bool
+    - ansible_user != 'root'
 
 # 如果Node有多个网卡的话，参考flannel issues 39701，
 # 目前需要在kube-flannel.yml中使用--iface参数指定集群主机内网网卡的名称，否则可能会出现dns无法解析。
