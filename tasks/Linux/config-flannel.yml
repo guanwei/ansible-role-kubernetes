@@ -4,7 +4,7 @@
   changed_when: false
   register: iface_result
 
-- name: Download flannel manifest file
+- name: Download Flannel manifest file
   get_url:
     url: "{{ kubernetes_flannel_manifest_file }}"
     dest: "/tmp/{{ kubernetes_flannel_manifest_file | basename }}"
@@ -13,9 +13,15 @@
   retries: 3
   delay: 2
 
-- name: Update flannel manifest file
+- name: Update Flannel manifest file
   shell: |
     grep -q '^\s*- --iface=' /tmp/{{ kubernetes_flannel_manifest_file | basename }} &&
       sed -i 's|^\(\s*\)- --iface=.*|\1- --iface={{ iface_result.stdout }}|g' /tmp/{{ kubernetes_flannel_manifest_file | basename }} ||
       sed -i '/^\(\s*\)- --kube-subnet-mgr/a\
             - --iface={{ iface_result.stdout }}' /tmp/{{ kubernetes_flannel_manifest_file | basename }}
+
+- name: Configure Flannel networking
+  command: kubectl apply -f /tmp/{{ kubernetes_flannel_manifest_file | basename }}
+  register: flannel_result
+  changed_when: "'created' in flannel_result.stdout"
+  become: true
