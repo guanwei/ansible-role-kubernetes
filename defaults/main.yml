@@ -18,6 +18,7 @@ kubernetes_pod_network:
   # cni: 'calico'
   # cidr: '192.168.0.0/16'
 
+set_kubeconfig_for_current_user: true
 kubernetes_allow_pods_on_master: true
 
 # Flannel config files.

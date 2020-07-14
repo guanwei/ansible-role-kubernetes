@@ -22,18 +22,18 @@
     msg: "{{ kubeadmin_init.stdout_lines }}"
   when: not kubernetes_init_stat.stat.exists
 
-- name: Ensure .kube directory exists
-  file:
-    path: ~/.kube
-    state: directory
+- name: Setup kubeconfig for root user
+  shell: |
+    mkdir -p $HOME/.kube
+    ln -sf /etc/kubernetes/admin.conf $HOME/.kube/config
   become: true
 
-- name: Symlink the kubectl admin.conf to ~/.kube/conf
-  file:
-    src: /etc/kubernetes/admin.conf
-    dest: ~/.kube/config
-    state: link
-  become: true
+- name: Setup kubeconfig for current user
+  shell: |
+    mkdir -p $HOME/.kube
+    sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  when: set_kubeconfig_for_current_user | bool
 
 # 如果Node有多个网卡的话，参考flannel issues 39701，
 # 目前需要在kube-flannel.yml中使用--iface参数指定集群主机内网网卡的名称，否则可能会出现dns无法解析。
