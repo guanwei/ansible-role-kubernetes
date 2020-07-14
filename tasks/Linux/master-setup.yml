@@ -67,5 +67,7 @@
   register: helm_current_version
   when: helm_is_installed.stat.exists
 
+- debug: msg="{{ helm_current_version.split('.')[0] }}"
+
 - import_tasks: helm_init.yml
   when: helm_current_version.split('.')[0] == 'v2'
