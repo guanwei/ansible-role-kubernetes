@@ -17,4 +17,4 @@
   shell: >
     grep -q '^\s*- --iface=' /tmp/{{ kubernetes_flannel_manifest_file | basename }} &&
       sed -i 's|^\(\s*\)- --iface=.*|\1- --iface={{ iface_result.stdout }}|g' /tmp/{{ kubernetes_flannel_manifest_file | basename }} ||
-      sed -i '/^\(\s*\)- --kube-subnet-mgr/a\1- --iface={{ iface_result.stdout }}' /tmp/{{ kubernetes_flannel_manifest_file | basename }}
+      sed -i '/^\(\s*\)- --kube-subnet-mgr/a \1- --iface={{ iface_result.stdout }}' /tmp/{{ kubernetes_flannel_manifest_file | basename }}
