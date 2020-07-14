@@ -23,13 +23,13 @@
   when: not kubernetes_init_stat.stat.exists
 
 - name: Setup kubeconfig for root user
-  shell: |
+  command: |
     mkdir -p $HOME/.kube
     ln -sf /etc/kubernetes/admin.conf $HOME/.kube/config
   become: true
 
 - name: Setup kubeconfig for current user
-  shell: |
+  command: |
     mkdir -p $HOME/.kube
     sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
