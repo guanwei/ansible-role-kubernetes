@@ -55,3 +55,17 @@
     - kubernetes_allow_pods_on_master | bool
     - not kubernetes_init_stat.stat.exists
   become: true
+
+- name: Check if Helm is installed
+  stat:
+    path: "/usr/local/bin/helm"
+  register: helm_is_installed
+
+- name: Gather currently installed Helm version
+  shell: /usr/local/bin/helm version --client | awk -F'"' '{print $2}'
+  changed_when: false
+  register: helm_current_version
+  when: helm_is_installed.stat.exists
+
+- import_tasks: helm_init.yml
+  when: helm_current_version.split('.')[0] == 'v2'
