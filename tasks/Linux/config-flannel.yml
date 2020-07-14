@@ -4,6 +4,8 @@
   changed_when: false
   register: iface_result
 
+- debug: msg="{{ iface_result }}"
+
 - name: Download flannel manifest file
   get_url:
     url: "{{ kubernetes_flannel_manifest_file }}"
