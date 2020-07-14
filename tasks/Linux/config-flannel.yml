@@ -4,8 +4,6 @@
   changed_when: false
   register: iface_result
 
-- debug: msg="{{ iface_result }}"
-
 - name: Download flannel manifest file
   get_url:
     url: "{{ kubernetes_flannel_manifest_file }}"
@@ -18,6 +16,6 @@
 - name: Update flannel manifest file
   lineinfile:
     path: "/tmp/{{ kubernetes_flannel_manifest_file | basename }}"
-    regexp: '^\(\s*\)- --iface=.*'
-    insertafter: '^\(\s*\)- --kube-subnet-mgr'
+    regexp: '^(\s*)- --iface=.*'
+    insertafter: '^(\s*)- --kube-subnet-mgr'
     line: '\1- --iface={{ iface_result.stdout }}'
