@@ -3,7 +3,7 @@
   command: >
     kubeadm init
     {% if kubernetes_version != 'latest' %}
-    --kubernetes-version {{ kubernetes_version }}
+    --kubernetes-version stable-{{ kubernetes_version }}
     {% endif %}
     {% if kubernetes_apiserver_advertise_address is defined %}
     --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
