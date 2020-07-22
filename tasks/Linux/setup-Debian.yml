@@ -24,8 +24,12 @@
 - name: Install Kubernetes packages
   apt:
     name:
-      - kubelet
-      - kubeadm
-      - kubectl
+      - kubelet{% if kubernetes_version != 'latest' %}={{ kubernetes_version }}*{% endif %}
+      - kubeadm{% if kubernetes_version != 'latest' %}={{ kubernetes_version }}*{% endif %}
+      - kubectl{% if kubernetes_version != 'latest' %}={{ kubernetes_version }}*{% endif %}
     state: present
+  become: true
+
+- name: Prevent Kubernetes packages from being upgraded
+  shell: apt-mark hold kubelet kubeadm kubectl
   become: true
