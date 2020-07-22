@@ -31,5 +31,12 @@
   become: true
 
 - name: Prevent Kubernetes packages from being upgraded
-  command: apt-mark hold kubelet kubeadm kubectl
-  become: true
+  dpkg_selections:
+    name: "{{ kube_pkg }}"
+    selection: hold
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+  loop_control:
+    loop_var: kube_pkg
