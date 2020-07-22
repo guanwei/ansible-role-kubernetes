@@ -2,6 +2,9 @@
 - name: Initialize Kubernetes master with kubeadm init
   command: >
     kubeadm init
+    {% if kubernetes_version =! 'latest' %}
+    --kubernetes-version={{ kubernetes_version }}
+    {% endif %}
     {% if kubernetes_apiserver_advertise_address is defined %}
     --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
     {% endif %}
