@@ -1,19 +1,20 @@
 ---
 - name: Check if hostpath-provisioner is installed
-  shell: helm status hostpath-provisioner >/dev/null 2>&1
+  shell: helm list hostpath-provisioner --deployed | grep -q hostpath-provisioner
   register: helm_status
-  no_log: true
   ignore_errors: yes
   changed_when: false
   become: true
 
-- name: Add rimusz helm repo
-  shell: helm repo add rimusz https://charts.rimusz.net
-  become: true
+- block:
+    - name: Add rimusz helm repo
+      shell: helm repo add rimusz https://charts.rimusz.net
+      become: true
 
-- name: Update helm repo
-  shell: helm repo update
-  become: true
+    - name: Update helm repo
+      shell: helm repo update
+      become: true
+  when: helm_status.rc != 0
 # - name: Install hostpath-provisioner
 #   shell: >
 #     helm install --name hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
