@@ -96,4 +96,5 @@
     state: present
     name: hostpath-provisioner
     namespace: kube-system
+  become: true
   where: "'hostpath-provisioner' in kubernetes_components"
