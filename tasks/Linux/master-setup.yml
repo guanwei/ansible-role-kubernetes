@@ -51,6 +51,7 @@
   retries: 3
   delay: 2
   until: result.rc == 0
+  changed_when: false
 
 - name: Configure Calico networking
   command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
