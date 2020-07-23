@@ -14,5 +14,5 @@
   become: true
 
 - name: Install or upgrade tiller
-  command: helm init --service-account=tiller --history-max 300 --upgrade
+  command: helm init --service-account=tiller --history-max 300 --upgrade --wait
   become: true
