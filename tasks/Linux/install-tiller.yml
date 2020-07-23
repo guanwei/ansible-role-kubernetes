@@ -1,18 +1,18 @@
 ---
 - name: Create tiller serviceaccount
-  command: kubectl create sa --namespace kube-system tiller
+  shell: kubectl create sa --namespace kube-system tiller
   register: result
   changed_when: "'created' in result.stdout"
   failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
   become: true
 
 - name: Create tiller clusterrolebinding
-  command: kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+  shell: kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
   register: result
   changed_when: "'created' in result.stdout"
   failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
   become: true
 
 - name: Install or upgrade tiller
-  command: helm init --service-account=tiller --history-max 300 --upgrade --wait
+  shell: helm init --service-account=tiller --history-max 300 --upgrade --wait
   become: true
