@@ -41,10 +41,6 @@
     - set_kubeconfig_for_current_user | bool
     - ansible_user != 'root'
 
-- import_tasks: config-flannel.yml
-  when:
-    - kubernetes_pod_network.cni == 'flannel'
-
 - name: Wait for Kubernetes running
   shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
   register: result
@@ -52,6 +48,10 @@
   delay: 2
   until: result.rc == 0
   changed_when: false
+
+- import_tasks: config-flannel.yml
+  when:
+    - kubernetes_pod_network.cni == 'flannel'
 
 - name: Configure Calico networking
   command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
