@@ -12,5 +12,6 @@
 
 - name: Install hostpath-provisioner
   command: >
-    helm install --name hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
+    helm install --name hostpath-provisioner rimusz/hostpath-provisioner
+      --namespace kube-system
   when: helm_status.rc != 0
