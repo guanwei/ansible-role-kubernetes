@@ -43,9 +43,9 @@
 
 - name: Wait for Kubernetes running
   shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
-  register: result
   retries: 3
   delay: 2
+  register: result
   until: result.rc == 0
   changed_when: false
 
