@@ -83,3 +83,17 @@
   when:
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
+
+- name: Install hostpath-provisioner
+  helm:
+    host: localhost
+    chart:
+      name: hostpath-provisioner
+      version: 0.2.9
+      source:
+        type: repo
+        location: https://charts.rimusz.net
+    state: present
+    name: hostpath-provisioner
+    namespace: kube-system
+  where: "'hostpath-provisioner' in kubernetes_components"

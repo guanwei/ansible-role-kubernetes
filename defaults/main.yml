@@ -27,3 +27,8 @@ kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flann
 
 # Calico config files
 kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico.yaml
+
+# Kubernetes components
+kubernetes_components:
+  - nginx-ingress
+  - hostpath-provisioner
