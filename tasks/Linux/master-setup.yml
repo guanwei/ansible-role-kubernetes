@@ -87,5 +87,12 @@
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
 
+- name: Check if hostpath-provisioner is installed
+  shell: helm status hostpath-provisioner >/dev/null 2>&1
+  register: helm_status
+  ignore_errors: yes
+  changed_when: false
+  become: true
+
 - import_tasks: install-hostpath-provisioner.yml
   when: kubernetes_install_hostpath_provisioner | bool
