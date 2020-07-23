@@ -1,6 +1,6 @@
 ---
 - name: Check if hostpath-provisioner is installed
-  command: helm status hostpath-provisioner
+  command: helm status hostpath-provisioner >/dev/null 2>&1
   register: helm_status
   ignore_errors: yes
   changed_when: false
@@ -12,5 +12,5 @@
 
 - name: Install hostpath-provisioner
   command: >
-    helm install hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
+    helm install --name hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
   when: helm_status.rc != 0
