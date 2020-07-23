@@ -41,6 +41,14 @@
     - set_kubeconfig_for_current_user | bool
     - ansible_user != 'root'
 
+- name: Wait for Kubernetes running
+  shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
+  register: result
+  retries: 3
+  delay: 2
+  until: result.rc == 0
+  changed_when: false
+
 - import_tasks: config-flannel.yml
   when:
     - kubernetes_pod_network.cni == 'flannel'
