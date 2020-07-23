@@ -45,6 +45,13 @@
   when:
     - kubernetes_pod_network.cni == 'flannel'
 
+- name: Wait for Kubernetes running
+  shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
+  register: result
+  retries: 3
+  delay: 2
+  until: result.rc == 0
+
 - name: Configure Calico networking
   command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
   register: calico_result

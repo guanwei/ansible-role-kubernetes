@@ -4,9 +4,9 @@
     url: "{{ kubernetes_flannel_manifest_file }}"
     dest: "/tmp/{{ kubernetes_flannel_manifest_file | basename }}"
   register: download_file
-  until: download_file is succeeded
   retries: 3
   delay: 2
+  until: download_file is succeeded
 
 # 如果Node有多个网卡的话，参考flannel issues 39701，
 # 目前需要在kube-flannel.yml中使用--iface参数指定集群主机内网网卡的名称，否则可能会出现dns无法解析。
