@@ -72,11 +72,14 @@
   shell: command -v helm >/dev/null 2>&1
   register: helm_is_installed
   ignore_errors: yes
+  changed_when: false
+  become: true
 
 - name: Gather currently installed Helm version
   shell: helm version --client | awk -F'"' '{print $2}'
   changed_when: false
   register: helm_current_version
+  become: true
   when: helm_is_installed.rc == 0
 
 - import_tasks: install-tiller.yml
