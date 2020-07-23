@@ -84,6 +84,14 @@
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
 
+- name: Install pip packages depends on helm module
+  pip:
+    name:
+      - pyhelm
+      - grpcio
+    executable: pip3
+  become: true
+
 - name: Install hostpath-provisioner
   helm:
     host: localhost
