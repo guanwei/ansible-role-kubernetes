@@ -84,11 +84,18 @@
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
 
+- name: Ensure pip3 is installed
+  apt:
+    name: python3-pip
+    state: present
+  become: true
+
 - name: Install pip packages dependent by helm module
   pip:
     name:
       - pyhelm
       - grpcio
+    state: present
     executable: pip3
   become: true
 
@@ -96,7 +103,6 @@
   helm:
     chart:
       name: hostpath-provisioner
-      version: 0.2.9
       source:
         type: repo
         location: https://charts.rimusz.net
