@@ -29,6 +29,5 @@ kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flann
 kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico.yaml
 
 # Kubernetes components
-kubernetes_components:
-  - nginx-ingress
-  - hostpath-provisioner
+kubernetes_install_hostpath_provisioner: true
+kubernetes_install_nginx_ingress: true
