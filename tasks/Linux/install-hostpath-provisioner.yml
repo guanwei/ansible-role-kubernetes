@@ -7,16 +7,16 @@
 
 - debug: msg="{{ helm_status }}"
 
-# - block:
-#     - name: Add rimusz helm repo
-#       shell: helm repo add rimusz https://charts.rimusz.net
-#       become: true
+- block:
+    - name: Add rimusz helm repo
+      shell: helm repo add rimusz https://charts.rimusz.net
+      become: true
 
-#     - name: Update helm repo
-#       shell: helm repo update
-#       become: true
-#   when: helm_status.rc != 0
-# - name: Install hostpath-provisioner
-#   shell: >
-#     helm install --name hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
-#   when: helm_status.rc != 0
+    - name: Update helm repo
+      shell: helm repo update
+      become: true
+
+    - name: Install hostpath-provisioner
+      shell: >
+        helm install --name hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
+  when: helm_status.stdout != ""
