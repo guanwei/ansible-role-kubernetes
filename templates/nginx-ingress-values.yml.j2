@@ -2,4 +2,4 @@ controller:
   service:
     type: ClusterIP
     externalIPs:
-      - {{ kubernetes_apiserver_advertise_address }}
+      - {{ kubernetes_apiserver_advertise_address | default(ansible_default_ipv4.address, true) }}
