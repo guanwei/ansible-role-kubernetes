@@ -10,8 +10,8 @@
       shell: helm fetch rimusz/hostpath-provisioner --version {{ kubernetes_hostpath_provisioner_version }} -d /tmp
 
     - name: Install hostpath-provisioner
-      shell: >
-        helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-{{ kubernetes_hostpath_provisioner_version }}.tgz
+      shell: |
+        helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-{{ kubernetes_hostpath_provisioner_version }}.tgz \
           --namespace kube-system --wait --force --recreate-pods
   become: true
   when: helm_status.stdout == ""
