@@ -1,10 +1,9 @@
 ---
-- debug:
-    msg: "{{ ansible_env.no }}"
-  when: ansible_env.no is defined
-# - set_fact:
-#     kubernetes_no_proxy: "{{ ansible_env.no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
-#   when: lookup('env','no_proxy') is defined
+- set_fact:
+    kubernetes_no_proxy: "{{ ansible_env.no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
+  when: ansible_env.no_proxy is defined
+
+- debug: msg="{{ kubernetes_no_proxy }}"
 
 # - name: Initialize Kubernetes master with kubeadm init
 #   command: >
