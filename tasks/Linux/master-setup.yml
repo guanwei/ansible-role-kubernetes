@@ -1,11 +1,11 @@
 ---
 - debug:
-  msg: >
-    {% if no_proxy is defined %}
-    "{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
-    {% else %}
-    "{{ omit }}"
-    {% endif %}
+    msg: >
+      {% if no_proxy is defined %}
+      "{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
+      {% else %}
+      "{{ omit }}"
+      {% endif %}
 
 - name: Initialize Kubernetes master with kubeadm init
   command: >
