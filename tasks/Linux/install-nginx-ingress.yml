@@ -16,8 +16,7 @@
 
     - name: Install nginx-ingress
       shell: >
-        helm upgrade -i nginx-ingress /tmp/nginx-ingress-{{ kubernetes_nginx_ingress_version }}.tgz
-          -f /tmp/nginx-ingress-values.yml
+        helm upgrade -i -f /tmp/nginx-ingress-values.yml nginx-ingress /tmp/nginx-ingress-{{ kubernetes_nginx_ingress_version }}.tgz
           --namespace kube-system --wait --force --recreate-pods
   become: true
   when: helm_status.stdout == ""
