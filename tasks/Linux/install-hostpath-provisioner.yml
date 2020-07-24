@@ -5,8 +5,6 @@
   changed_when: false
   become: true
 
-- debug: msg="{{ helm_status }}"
-
 - block:
     - name: Add rimusz helm repo
       shell: helm repo add rimusz https://charts.rimusz.net
@@ -19,4 +17,4 @@
     - name: Install hostpath-provisioner
       shell: >
         helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
-  when: helm_status.stdout != ""
+  when: helm_status.stdout == ""
