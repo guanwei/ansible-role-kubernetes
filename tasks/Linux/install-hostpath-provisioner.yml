@@ -18,7 +18,7 @@
       shell: helm fetch rimusz/hostpath-provisioner --untar -d /tmp
       become: true
 
-    # - name: Install hostpath-provisioner
-    #   shell: >
-    #     helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
+    - name: Install hostpath-provisioner
+      shell: >
+        helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
   when: helm_status.stdout == ""
