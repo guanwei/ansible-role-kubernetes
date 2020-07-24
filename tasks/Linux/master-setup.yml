@@ -1,6 +1,6 @@
 ---
 - set_fact:
-    kubernetes_no_proxy: "{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) }}"
+    kubernetes_no_proxy: "{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
 
 - debug: msg="{{ kubernetes_no_proxy }}"
 
@@ -18,6 +18,10 @@
     {% endif %}
     --pod-network-cidr={{ kubernetes_pod_network.cidr }}
     {{ kubernetes_kubeadm_init_extra_opts }}
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+    no_proxy: "{{ no_proxy }}"
   register: kubeadmin_init
   become: true
   when: not kubernetes_init_stat.stat.exists
