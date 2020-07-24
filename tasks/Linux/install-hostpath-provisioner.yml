@@ -7,11 +7,11 @@
 
 - block:
     - name: Add rimusz helm repo
-      shell: helm repo add rimusz https://charts.rimusz.net
+      command: helm repo add rimusz https://charts.rimusz.net
       become: true
 
     - name: Update helm repo
-      shell: helm repo update
+      command: helm repo update
       become: true
 
     - name: Install hostpath-provisioner
