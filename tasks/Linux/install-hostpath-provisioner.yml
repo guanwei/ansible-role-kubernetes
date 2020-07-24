@@ -15,6 +15,6 @@
       become: true
 
     - name: Install hostpath-provisioner
-      shell: >
+      command: >
         helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
   when: helm_status.stdout == ""
