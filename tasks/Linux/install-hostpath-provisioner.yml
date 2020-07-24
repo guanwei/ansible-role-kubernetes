@@ -10,11 +10,15 @@
       shell: helm repo add rimusz https://charts.rimusz.net
       become: true
 
-    # - name: Update helm repo
-    #   shell: helm repo update
-    #   become: true
+    - name: Update helm repo
+      shell: helm repo update
+      become: true
 
-    - name: Install hostpath-provisioner
-      shell: >
-        helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
+    - name: Download hostpath-provisioner chart
+      shell: helm fetch rimusz/hostpath-provisioner --untardir /tmp
+      become: true
+
+    # - name: Install hostpath-provisioner
+    #   shell: >
+    #     helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
   when: helm_status.stdout == ""
