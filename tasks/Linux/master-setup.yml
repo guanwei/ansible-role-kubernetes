@@ -87,19 +87,5 @@
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
 
-- name: Install pip3
-  apt:
-    name: python3-pip
-    state: present
-  become: true
-
-- name: Install pip packages dependent by helm module
-  pip:
-    name:
-      - pyhelm
-      - grpcio
-    executable: pip3
-  become: true
-
 - import_tasks: install-hostpath-provisioner.yml
   when: kubernetes_install_hostpath_provisioner | bool
