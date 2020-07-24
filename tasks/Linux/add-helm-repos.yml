@@ -1,0 +1,12 @@
+---
+- name: Add stable helm repo
+  shell: helm repo add stable {{ kubernetes_helm_stable_repo_url }}
+  become: true
+
+- name: Add rimusz helm repo
+  shell: helm repo add rimusz https://charts.rimusz.net
+  become: true
+
+- name: Update helm repos
+  shell: helm repo update
+  become: true

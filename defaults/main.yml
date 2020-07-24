@@ -28,6 +28,9 @@ kubernetes_flannel_manifest_file: https://raw.githubusercontent.com/coreos/flann
 # Calico config files
 kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico.yaml
 
+# Helm
+kubernetes_helm_stable_repo_url: https://kubernetes-charts.storage.googleapis.com
+
 # Kubernetes components
 kubernetes_install_hostpath_provisioner: true
 kubernetes_install_nginx_ingress: true

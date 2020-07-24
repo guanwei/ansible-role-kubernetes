@@ -6,19 +6,12 @@
   become: true
 
 - block:
-    - name: Add rimusz helm repo
-      shell: helm repo add rimusz https://charts.rimusz.net
-      become: true
-
-    - name: Update helm repo
-      shell: helm repo update
-      become: true
-
     - name: Download hostpath-provisioner chart
       shell: helm fetch rimusz/hostpath-provisioner --version 0.2.9 -d /tmp
-      become: true
 
     - name: Install hostpath-provisioner
       shell: >
-        helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-0.2.9.tgz --namespace kube-system --wait --force --recreate-pods
+        helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-0.2.9.tgz
+          --namespace kube-system --wait --force --recreate-pods
+  become: true
   when: helm_status.stdout == ""
