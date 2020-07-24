@@ -33,4 +33,7 @@ kubernetes_helm_stable_repo_url: https://kubernetes-charts.storage.googleapis.co
 
 # Kubernetes components
 kubernetes_install_hostpath_provisioner: true
+kubernetes_hostpath_provisioner_version: 0.2.9
+
 kubernetes_install_nginx_ingress: true
+kubernetes_nginx_ingress_version: 1.41.2

@@ -1,0 +1,5 @@
+controller:
+  service:
+    type: ClusterIP
+    externalIPs:
+      - {{ kubernetes_apiserver_advertise_address }}
