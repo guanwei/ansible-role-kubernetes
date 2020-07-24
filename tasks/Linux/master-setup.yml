@@ -1,4 +1,9 @@
 ---
+- set_fact:
+  kubernetes_no_proxy: "{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) }}"
+
+- debug: msg="{{ kubernetes_no_proxy }}"
+
 - name: Initialize Kubernetes master with kubeadm init
   command: >
     kubeadm init
