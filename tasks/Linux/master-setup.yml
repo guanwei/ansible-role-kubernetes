@@ -43,8 +43,8 @@
 
 - name: Wait for Kubernetes running
   shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
-  retries: 3
-  delay: 2
+  retries: 10
+  delay: 3
   register: result
   until: result.rc == 0
   changed_when: false
@@ -86,13 +86,6 @@
   when:
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
-
-- name: Check if hostpath-provisioner is installed
-  shell: helm status hostpath-provisioner >/dev/null 2>&1
-  register: helm_status
-  ignore_errors: yes
-  changed_when: false
-  become: true
 
 - import_tasks: install-hostpath-provisioner.yml
   when: kubernetes_install_hostpath_provisioner | bool
