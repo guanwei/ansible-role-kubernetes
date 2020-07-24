@@ -7,15 +7,16 @@
 
 - block:
     - name: Add rimusz helm repo
-      command: helm repo add rimusz https://charts.rimusz.net
+      shell: helm repo add rimusz https://charts.rimusz.net
       become: true
 
     - name: Update helm repo
-      command: helm repo update
+      shell: helm repo update
       become: true
 
     - name: Install hostpath-provisioner
-      command: >
+      shell: >
         helm install --name hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system
-        #helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
   when: helm_status.stdout == ""
+
+#helm upgrade -i hostpath-provisioner rimusz/hostpath-provisioner --namespace kube-system --wait --force --recreate-pods
