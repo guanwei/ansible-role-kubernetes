@@ -15,7 +15,7 @@
       become: true
 
     - name: Download hostpath-provisioner chart
-      shell: helm fetch rimusz/hostpath-provisioner --untar dir /tmp
+      shell: helm fetch rimusz/hostpath-provisioner -d /tmp
       become: true
 
     # - name: Install hostpath-provisioner
