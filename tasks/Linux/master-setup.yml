@@ -1,108 +1,107 @@
 ---
-- set_fact:
+- name: Get kubernetes no_proxy variable
+  set_fact:
     kubernetes_no_proxy: "{{ ansible_env.no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
   when: ansible_env.no_proxy is defined
 
-- debug: msg="{{ kubernetes_no_proxy }}"
+- name: Initialize Kubernetes master with kubeadm init
+  command: >
+    kubeadm init
+    {% if kubernetes_version != 'latest' %}
+    --kubernetes-version={{ kubernetes_version }}
+    {% endif %}
+    {% if kubernetes_apiserver_advertise_address is defined %}
+    --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
+    {% endif %}
+    {% if kubernetes_ignore_preflight_errors is defined %}
+    --ignore-preflight-errors={{ kubernetes_ignore_preflight_errors }}
+    {% endif %}
+    --pod-network-cidr={{ kubernetes_pod_network.cidr }}
+    {{ kubernetes_kubeadm_init_extra_opts }}
+  environment:
+    no_proxy: "{{ kubernetes_no_proxy | default(omit) }}"
+    NO_PROXY: "{{ kubernetes_no_proxy | default(omit) }}"
+  register: kubeadmin_init
+  become: true
+  when: not kubernetes_init_stat.stat.exists
 
-# - name: Initialize Kubernetes master with kubeadm init
-#   command: >
-#     kubeadm init
-#     {% if kubernetes_version != 'latest' %}
-#     --kubernetes-version={{ kubernetes_version }}
-#     {% endif %}
-#     {% if kubernetes_apiserver_advertise_address is defined %}
-#     --apiserver-advertise-address={{ kubernetes_apiserver_advertise_address }}
-#     {% endif %}
-#     {% if kubernetes_ignore_preflight_errors is defined %}
-#     --ignore-preflight-errors={{ kubernetes_ignore_preflight_errors }}
-#     {% endif %}
-#     --pod-network-cidr={{ kubernetes_pod_network.cidr }}
-#     {{ kubernetes_kubeadm_init_extra_opts }}
-#   environment:
-#     no_proxy: "{% if no_proxy is defined %}{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}{%else %}{{ omit }}{% endif %}"
-#     NO_PROXY: "{% if no_proxy is defined %}{{ no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}{%else %}{{ omit }}{% endif %}"
-#   register: kubeadmin_init
-#   become: true
-#   when: not kubernetes_init_stat.stat.exists
+- name: Print the init output to screen
+  debug:
+    msg: "{{ kubeadmin_init.stdout_lines }}"
+  when: not kubernetes_init_stat.stat.exists
 
-# - name: Print the init output to screen
-#   debug:
-#     msg: "{{ kubeadmin_init.stdout_lines }}"
-#   when: not kubernetes_init_stat.stat.exists
+- name: Setup kubeconfig for root user
+  shell: |
+    mkdir -p $HOME/.kube
+    ln -sf /etc/kubernetes/admin.conf $HOME/.kube/config
+  args:
+    warn: false
+  become: true
 
-# - name: Setup kubeconfig for root user
-#   shell: |
-#     mkdir -p $HOME/.kube
-#     ln -sf /etc/kubernetes/admin.conf $HOME/.kube/config
-#   args:
-#     warn: false
-#   become: true
+- name: Setup kubeconfig for current user (not root user)
+  shell: |
+    mkdir -p $HOME/.kube
+    sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  args:
+    warn: false
+  when:
+    - set_kubeconfig_for_current_user | bool
+    - ansible_user != 'root'
 
-# - name: Setup kubeconfig for current user (not root user)
-#   shell: |
-#     mkdir -p $HOME/.kube
-#     sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
-#     sudo chown $(id -u):$(id -g) $HOME/.kube/config
-#   args:
-#     warn: false
-#   when:
-#     - set_kubeconfig_for_current_user | bool
-#     - ansible_user != 'root'
+- name: Wait for Kubernetes running
+  shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
+  retries: 10
+  delay: 3
+  register: result
+  until: result.rc == 0
+  changed_when: false
+  become: true
 
-# - name: Wait for Kubernetes running
-#   shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
-#   retries: 10
-#   delay: 3
-#   register: result
-#   until: result.rc == 0
-#   changed_when: false
-#   become: true
+- import_tasks: config-flannel.yml
+  when:
+    - kubernetes_pod_network.cni == 'flannel'
 
-# - import_tasks: config-flannel.yml
-#   when:
-#     - kubernetes_pod_network.cni == 'flannel'
+- name: Configure Calico networking
+  command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
+  register: calico_result
+  changed_when: "'created' in calico_result.stdout"
+  when: kubernetes_pod_network.cni == 'calico'
+  become: true
 
-# - name: Configure Calico networking
-#   command: kubectl apply -f {{ kubernetes_calico_manifest_file }}
-#   register: calico_result
-#   changed_when: "'created' in calico_result.stdout"
-#   when: kubernetes_pod_network.cni == 'calico'
-#   become: true
+- name: Allow pods on master node (if configured)
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
+  when:
+    - kubernetes_allow_pods_on_master | bool
+    - not kubernetes_init_stat.stat.exists
+  become: true
 
-# - name: Allow pods on master node (if configured)
-#   command: kubectl taint nodes --all node-role.kubernetes.io/master-
-#   when:
-#     - kubernetes_allow_pods_on_master | bool
-#     - not kubernetes_init_stat.stat.exists
-#   become: true
+- name: Check is Helm installed
+  shell: command -v helm >/dev/null 2>&1
+  register: helm_is_installed
+  ignore_errors: yes
+  changed_when: false
+  become: true
 
-# - name: Check is Helm installed
-#   shell: command -v helm >/dev/null 2>&1
-#   register: helm_is_installed
-#   ignore_errors: yes
-#   changed_when: false
-#   become: true
+- name: Gather currently installed Helm version
+  shell: helm version --client | awk -F'"' '{print $2}'
+  changed_when: false
+  register: helm_current_version
+  become: true
+  when: helm_is_installed.rc == 0
 
-# - name: Gather currently installed Helm version
-#   shell: helm version --client | awk -F'"' '{print $2}'
-#   changed_when: false
-#   register: helm_current_version
-#   become: true
-#   when: helm_is_installed.rc == 0
+- import_tasks: install-tiller.yml
+  when:
+    - helm_is_installed.rc == 0
+    - helm_current_version.stdout.split('.')[0] == 'v2'
 
-# - import_tasks: install-tiller.yml
-#   when:
-#     - helm_is_installed.rc == 0
-#     - helm_current_version.stdout.split('.')[0] == 'v2'
+- import_tasks: add-helm-repos.yml
 
-# - import_tasks: add-helm-repos.yml
+- import_tasks: install-hostpath-provisioner.yml
+  when: kubernetes_install_hostpath_provisioner | bool
 
-# - import_tasks: install-hostpath-provisioner.yml
-#   when: kubernetes_install_hostpath_provisioner | bool
+- import_tasks: install-nginx-ingress.yml
+  when: kubernetes_install_nginx_ingress | bool
 
-# - import_tasks: install-nginx-ingress.yml
-#   when: kubernetes_install_nginx_ingress | bool
-
-# - import_tasks: install-metrics-server.yml
-#   when: kubernetes_install_metrics_server | bool
+- import_tasks: install-metrics-server.yml
+  when: kubernetes_install_metrics_server | bool
