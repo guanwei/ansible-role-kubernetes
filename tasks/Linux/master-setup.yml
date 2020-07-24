@@ -1,6 +1,6 @@
 ---
 - debug:
-    msg: "{{ lookup('env','no_proxy') }}"
+    msg: "{{ ansible_env.no_proxy }}"
 # - set_fact:
 #     kubernetes_no_proxy: "{{ lookup('env','no_proxy').split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
 #   when: lookup('env','no_proxy') is defined
