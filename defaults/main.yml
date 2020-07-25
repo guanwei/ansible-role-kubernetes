@@ -43,3 +43,5 @@ kubernetes_metrics_server_version: 2.11.1
 
 kubernetes_install_prometheus_operator: true
 kubernetes_prometheus_operator_version: 9.0.1
+kubernetes_prometheus_operator_namespace: kube-ops
+kubernetes_grafana_admin_password: admin

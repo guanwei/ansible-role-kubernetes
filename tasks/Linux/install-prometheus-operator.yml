@@ -8,7 +8,7 @@
 - block:
     - name: Create etcd secret
       shell: |
-        kubectl create ns kube-ops
+        kubectl create ns {{ kubernetes_prometheus_operator_namespace }}
         kubectl -n kube-ops create secret generic etcd-certs \
           --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
           --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.key \
@@ -42,6 +42,6 @@
     #   shell: |
     #     helm upgrade -i prometheus-operator /tmp/prometheus-operator-{{ kubernetes_prometheus_operator_version }}.tgz \
     #       -f /tmp/prometheus-operator-values.yml \
-    #       --namespace kube-system --force --recreate-pods
+    #       --namespace {{ kubernetes_prometheus_operator_namespace }} --force --recreate-pods
   become: true
   when: helm_status.stdout == ""

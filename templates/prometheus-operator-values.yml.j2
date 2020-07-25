@@ -44,7 +44,7 @@ prometheus:
       - /prometheus(/|$)(.*)
 
 grafana:
-  adminPassword: admin
+  adminPassword: {{ kubernetes_grafana_admin_password }}
   env:
     GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s/grafana"
   ingress:
