@@ -13,5 +13,10 @@
       shell: |
         helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-{{ kubernetes_hostpath_provisioner_version }}.tgz \
           --namespace kube-system --force --recreate-pods
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
   become: true
   when: helm_status.stdout == ""

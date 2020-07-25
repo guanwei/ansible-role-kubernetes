@@ -19,5 +19,10 @@
         helm upgrade -i nginx-ingress /tmp/nginx-ingress-{{ kubernetes_nginx_ingress_version }}.tgz \
           -f /tmp/nginx-ingress-values.yml \
           --namespace kube-system --force --recreate-pods
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
   become: true
   when: helm_status.stdout == ""
