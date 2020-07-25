@@ -1,0 +1,47 @@
+---
+- name: Check if prometheus-operator is installed
+  shell: helm list prometheus-operator --deployed
+  register: helm_status
+  changed_when: false
+  become: true
+
+- block:
+    - name: Create etcd secret
+      shell: |
+        kubectl create ns kube-ops
+        kubectl -n kube-ops create secret generic etcd-certs \
+          --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
+          --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.key \
+          --from-file=/etc/kubernetes/pki/etcd/ca.crt
+      register: result
+      changed_when: "'created' in result.stdout"
+
+    - name: Modify kube-proxy configmap
+      shell: |
+        kubectl -n kube-system get cm kube-proxy -o yaml | \
+          sed 's/metricsBindAddress:.*/metricsBindAddress: "0.0.0.0:10249"/' | \
+          kubectl apply -f -
+      register: result
+      changed_when: "'configured' in result.stdout"
+
+    - name: Restart kube-proxy
+      shell: |
+        kubectl -n kube-system delete pod -l "k8s-app=kube-proxy"
+      register: result
+      changed_when: "'deleted' in result.stdout"
+
+    - name: Download prometheus-operator chart
+      shell: helm fetch stable/prometheus-operator --version {{ kubernetes_prometheus_operator_version }} -d /tmp
+
+    - name: Copy prometheus-operator vlaues file
+      template:
+        src: prometheus-operator-values.yml.j2
+        dest: /tmp/prometheus-operator-values.yml
+
+    # - name: Install prometheus-operator
+    #   shell: |
+    #     helm upgrade -i prometheus-operator /tmp/prometheus-operator-{{ kubernetes_prometheus_operator_version }}.tgz \
+    #       -f /tmp/prometheus-operator-values.yml \
+    #       --namespace kube-system --force --recreate-pods
+  become: true
+  when: helm_status.stdout == ""
