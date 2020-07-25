@@ -105,3 +105,6 @@
 
 - import_tasks: install-metrics-server.yml
   when: kubernetes_install_metrics_server | bool
+
+- import_tasks: install-prometheus-operator.yml
+  when: kubernetes_install_prometheus_operator | bool
