@@ -6,10 +6,17 @@
   become: true
 
 - block:
-    - name: Create etcd secret
+    - name: Create namespace {{ kubernetes_prometheus_operator_namespace }}
       shell: |
-        kubectl create ns {{ kubernetes_prometheus_operator_namespace }}
-        kubectl -n kube-ops create secret generic etcd-certs \
+        kubectl get ns {{ kubernetes_prometheus_operator_namespace }} || \
+          kubectl create ns {{ kubernetes_prometheus_operator_namespace }}
+      register: result
+      changed_when: "'created' in result.stdout"
+
+    - name: Create secret etcd-certs
+      shell: |
+        kubectl -n {{ kubernetes_prometheus_operator_namespace }} get secret etcd-certs || \
+        kubectl -n {{ kubernetes_prometheus_operator_namespace }} create secret generic etcd-certs \
           --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
           --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.key \
           --from-file=/etc/kubernetes/pki/etcd/ca.crt
