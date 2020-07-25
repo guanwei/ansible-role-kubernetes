@@ -18,7 +18,7 @@
       shell: |
         helm upgrade -i kubernetes-dashboard /tmp/kubernetes-dashboard-{{ kubernetes_dashboard_version }}.tgz \
           -f /tmp/kubernetes-dashboard-values.yml \
-          --namespace {{ kubernetes_dashboard_namespace }} --force --recreate-pods
+          --namespace {{ kubernetes_dashboard_namespace }} --force
       register: install_result
 
     - name: Print the install output to screen

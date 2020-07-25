@@ -48,7 +48,7 @@
       shell: |
         helm upgrade -i prometheus-operator /tmp/prometheus-operator-{{ kubernetes_prometheus_operator_version }}.tgz \
           -f /tmp/prometheus-operator-values.yml \
-          --namespace {{ kubernetes_prometheus_operator_namespace }} --force --recreate-pods
+          --namespace {{ kubernetes_prometheus_operator_namespace }} --force
       register: install_result
 
     - name: Print the install output to screen

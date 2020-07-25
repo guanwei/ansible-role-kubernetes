@@ -18,7 +18,7 @@
       shell: |
         helm upgrade -i metrics-server /tmp/metrics-server-{{ kubernetes_metrics_server_version }}.tgz \
           -f /tmp/metrics-server-values.yml \
-          --namespace kube-system --force --recreate-pods
+          --namespace kube-system --force
       register: install_result
 
     - name: Print the install output to screen
