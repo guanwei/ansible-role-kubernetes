@@ -50,5 +50,10 @@
         helm upgrade -i prometheus-operator /tmp/prometheus-operator-{{ kubernetes_prometheus_operator_version }}.tgz \
           -f /tmp/prometheus-operator-values.yml \
           --namespace {{ kubernetes_prometheus_operator_namespace }} --force --recreate-pods
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
   become: true
   when: helm_status.stdout == ""
