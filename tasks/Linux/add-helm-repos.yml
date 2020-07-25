@@ -7,6 +7,10 @@
   shell: helm repo add rimusz https://charts.rimusz.net
   become: true
 
+- name: Add kubernetes-dashboard helm repo
+  shell: helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard
+  become: true
+
 - name: Update helm repos
   shell: helm repo update
   become: true
