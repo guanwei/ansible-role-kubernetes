@@ -1,15 +1,15 @@
 alertmanager:
   alertmanagerSpec:
-  {% if kubernetes_install_hostpath_provisioner | bool %}
+{% if kubernetes_install_hostpath_provisioner | bool %}
     storage:
       volumeClaimTemplate:
         spec:
           resources:
             requests:
               storage: 50Gi
-  {% else %}
+{% else %}
     storage: {}
-  {% endif %}
+{% endif %}
     externalUrl: http://localhost/alertmanager
   ingress:
     enabled: true
@@ -25,16 +25,16 @@ prometheus:
     ruleSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
-  {% if kubernetes_install_hostpath_provisioner | bool %}
+{% if kubernetes_install_hostpath_provisioner | bool %}
     storageSpec:
       volumeClaimTemplate:
         spec:
           resources:
             requests:
               storage: 50Gi
-  {% else %}
+{% else %}
     storageSpec: {}
-  {% endif %}
+{% endif %}
     externalUrl: http://localhost/prometheus
   ingress:
     enabled: true
@@ -55,12 +55,12 @@ grafana:
       - ""
     path: /grafana(/|$)(.*)
   persistence:
-  {% if kubernetes_install_hostpath_provisioner | bool %}
+{% if kubernetes_install_hostpath_provisioner | bool %}
     enabled: true
     size: 10Gi
-  {% else %}
+{% else %}
     enabled: false
-  {% endif %}
+{% endif %}
 
 kubeEtcd:
   serviceMonitor:
