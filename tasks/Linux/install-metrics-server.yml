@@ -1,6 +1,6 @@
 ---
 - name: Check if metrics-server is installed
-  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^metrics-server ' | wc -l
+  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^metrics-server\s' | wc -l
   register: install_status
   changed_when: false
   become: true

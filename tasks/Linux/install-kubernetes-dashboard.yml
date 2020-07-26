@@ -1,6 +1,6 @@
 ---
 - name: Check if kubernetes-dashboard is installed
-  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^kubernetes-dashboard ' | wc -l
+  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^kubernetes-dashboard\s' | wc -l
   register: install_status
   changed_when: false
   become: true
