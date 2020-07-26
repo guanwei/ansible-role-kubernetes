@@ -17,7 +17,7 @@
 
     - name: Migrate helm v2 releases in-place to helm v3
       shell: |
-        echo {{ helm_releases.stdout }} | xargs -n1 helm 2to3 convert
+        echo {{ helm_releases.stdout_lines }} | xargs -n1 helm 2to3 convert
       register: result
       changed_when: "'converted successfully' in result.stdout"
       failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
