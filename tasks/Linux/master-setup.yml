@@ -1,4 +1,9 @@
 ---
+- name: Get kubernetes no_proxy variable
+  set_fact:
+    kubernetes_no_proxy: "{{ ansible_env.no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
+  when: ansible_env.no_proxy is defined
+
 - name: Initialize Kubernetes master with kubeadm init
   command: >
     kubeadm init
@@ -13,6 +18,9 @@
     {% endif %}
     --pod-network-cidr={{ kubernetes_pod_network.cidr }}
     {{ kubernetes_kubeadm_init_extra_opts }}
+  environment:
+    no_proxy: "{{ kubernetes_no_proxy | default(omit) }}"
+    NO_PROXY: "{{ kubernetes_no_proxy | default(omit) }}"
   register: kubeadmin_init
   become: true
   when: not kubernetes_init_stat.stat.exists
@@ -43,8 +51,8 @@
 
 - name: Wait for Kubernetes running
   shell: kubectl cluster-info | grep 'Kubernetes master' | grep -q 'running'
-  retries: 3
-  delay: 2
+  retries: 10
+  delay: 3
   register: result
   until: result.rc == 0
   changed_when: false
@@ -72,14 +80,44 @@
   shell: command -v helm >/dev/null 2>&1
   register: helm_is_installed
   ignore_errors: yes
+  changed_when: false
+  become: true
 
 - name: Gather currently installed Helm version
   shell: helm version --client | awk -F'"' '{print $2}'
   changed_when: false
   register: helm_current_version
+  become: true
   when: helm_is_installed.rc == 0
 
-- import_tasks: install-tiller.yml
+- name: Install tiller (only for helm v2)
+  include_tasks: install-tiller.yml
   when:
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
+
+- import_tasks: add-helm-repos.yml
+
+- name: Migrate helm releases
+  include_tasks: migrate-helm-releases.yml
+  when: kubernetes_helm_migrate_releases | bool
+
+- name: Install hostpath-provisioner
+  include_tasks: install-hostpath-provisioner.yml
+  when: kubernetes_install_hostpath_provisioner | bool
+
+- name: Install nginx-ingress
+  include_tasks: install-nginx-ingress.yml
+  when: kubernetes_install_nginx_ingress | bool
+
+- name: Install metrics-server
+  include_tasks: install-metrics-server.yml
+  when: kubernetes_install_metrics_server | bool
+
+- name: Install kubernetes-dashboard
+  include_tasks: install-kubernetes-dashboard.yml
+  when: kubernetes_install_dashboard | bool
+
+- name: Install prometheus-operator
+  include_tasks: install-prometheus-operator.yml
+  when: kubernetes_install_prometheus_operator | bool
