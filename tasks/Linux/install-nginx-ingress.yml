@@ -1,6 +1,6 @@
 ---
 - name: Check if nginx-ingress is installed
-  shell: helm list --deployed | grep -q '^nginx-ingress '
+  shell: helm list --deployed | grep '^nginx-ingress ' | wc -l
   register: install_status
   changed_when: false
   become: true
@@ -25,4 +25,4 @@
       debug:
         msg: "{{ install_result.stdout_lines }}"
   become: true
-  when: install_status.rc != 0
+  when: install_status.stdout == '0'

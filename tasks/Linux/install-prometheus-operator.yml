@@ -1,7 +1,7 @@
 ---
 - name: Check if prometheus-operator is installed
-  shell: helm list prometheus-operator --deployed
-  register: helm_status
+  shell: helm list --deployed | grep '^prometheus-operator ' | wc -l
+  register: install_status
   changed_when: false
   become: true
 
@@ -55,4 +55,4 @@
       debug:
         msg: "{{ install_result.stdout_lines }}"
   become: true
-  when: helm_status.stdout == ""
+  when: install_status.stdout == '0'

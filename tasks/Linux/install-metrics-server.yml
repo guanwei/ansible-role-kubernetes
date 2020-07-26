@@ -1,6 +1,6 @@
 ---
 - name: Check if metrics-server is installed
-  shell: helm list --deployed | grep -q '^metrics-server '
+  shell: helm list --deployed | grep '^metrics-server ' | wc -l
   register: install_status
   changed_when: false
   become: true
@@ -25,4 +25,4 @@
       debug:
         msg: "{{ install_result.stdout_lines }}"
   become: true
-  when: install_status.rc != 0
+  when: install_status.stdout == '0'
