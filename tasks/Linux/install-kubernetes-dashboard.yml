@@ -1,7 +1,7 @@
 ---
 - name: Check if kubernetes-dashboard is installed
-  shell: helm list kubernetes-dashboard --deployed
-  register: helm_status
+  shell: helm list --deployed | grep -q '^kubernetes-dashboard '
+  register: intall_status
   changed_when: false
   become: true
 
@@ -40,4 +40,4 @@
       changed_when: "'created' in result.stdout"
       failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
   become: true
-  when: helm_status.stdout == ""
+  when: intall_status.rc != 0
