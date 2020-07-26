@@ -12,7 +12,7 @@
     - name: Install hostpath-provisioner
       shell: |
         helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-{{ kubernetes_hostpath_provisioner_version }}.tgz \
-          --namespace kube-system --force
+          --namespace kube-system --force --wait
       register: install_result
 
     - name: Print the install output to screen
