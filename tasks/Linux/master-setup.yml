@@ -96,6 +96,8 @@
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
 
+- import_tasks: migrate-helm-releases.yml
+
 - import_tasks: add-helm-repos.yml
 
 - name: Install hostpath-provisioner
