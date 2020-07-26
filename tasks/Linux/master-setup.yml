@@ -90,24 +90,30 @@
   become: true
   when: helm_is_installed.rc == 0
 
-- include_tasks: install-tiller.yml
+- name: Install tiller (helm v2)
+  include_tasks: install-tiller.yml
   when:
     - helm_is_installed.rc == 0
     - helm_current_version.stdout.split('.')[0] == 'v2'
 
 - import_tasks: add-helm-repos.yml
 
-- include_tasks: install-hostpath-provisioner.yml
+- name: Install hostpath-provisioner
+  include_tasks: install-hostpath-provisioner.yml
   when: kubernetes_install_hostpath_provisioner | bool
 
-- include_tasks: install-nginx-ingress.yml
+- name: Install nginx-ingress
+  include_tasks: install-nginx-ingress.yml
   when: kubernetes_install_nginx_ingress | bool
 
-- include_tasks: install-metrics-server.yml
+- name: Install metrics-server
+  include_tasks: install-metrics-server.yml
   when: kubernetes_install_metrics_server | bool
 
-- include_tasks: install-kubernetes-dashboard.yml
+- name: Install kubernetes-dashboard
+  include_tasks: install-kubernetes-dashboard.yml
   when: kubernetes_install_dashboard | bool
 
-- include_tasks: install-prometheus-operator.yml
+- name: Install prometheus-operator
+  include_tasks: install-prometheus-operator.yml
   when: kubernetes_install_prometheus_operator | bool
