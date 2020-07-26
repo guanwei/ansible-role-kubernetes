@@ -13,6 +13,8 @@
       register: helm_releases
       changed_when: false
 
+    - debug: msg="{{ helm_releases }}"
+
     - name: Migrate helm v2 releases in-place to helm v3
       shell: |
         echo {{ helm_releases.stdout }} | xargs -n1 helm 2to3 convert
