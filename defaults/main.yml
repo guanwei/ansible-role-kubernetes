@@ -32,20 +32,20 @@ kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico
 kubernetes_helm_stable_repo_url: https://kubernetes-charts.storage.googleapis.com
 
 # Kubernetes components
-kubernetes_install_hostpath_provisioner: true
+kubernetes_install_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
 
-kubernetes_install_nginx_ingress: true
+kubernetes_install_nginx_ingress: false
 kubernetes_nginx_ingress_version: 1.41.2
 
-kubernetes_install_metrics_server: true
+kubernetes_install_metrics_server: false
 kubernetes_metrics_server_version: 2.11.1
 
-kubernetes_install_dashboard: true
+kubernetes_install_dashboard: false
 kubernetes_dashboard_version: 2.3.0
 kubernetes_dashboard_namespace: kube-ops
 
-kubernetes_install_prometheus_operator: true
+kubernetes_install_prometheus_operator: false
 kubernetes_prometheus_operator_version: 9.0.1
 kubernetes_prometheus_operator_namespace: kube-ops
 kubernetes_grafana_admin_password: admin
