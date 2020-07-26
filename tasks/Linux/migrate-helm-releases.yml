@@ -3,11 +3,15 @@
     - name: Install 2to3 plugin
       shell: helm plugin install https://github.com/helm/helm-2to3.git
       register: result
+      changed_when: "'Installed plugin: 2to3' in result.stdout"
       failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
 
     - name: Migrate helm v2 releases in-place to helm v3
       shell: |
         kubectl get configmap -n kube-system -l "OWNER=TILLER" | awk '{print $1}' | \
           grep -v NAME | cut -d '.' -f1 | uniq | xargs -n1 helm 2to3 convert
+      register: result
+      changed_when: "'converted successfully' in result.stdout"
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
   become: true
   when: helm_current_version.stdout.split('.')[0] > 'v2'
