@@ -14,6 +14,12 @@
         src: kubernetes-dashboard-values.yml.j2
         dest: /tmp/kubernetes-dashboard-values.yml
 
+    - name: Create namespace {{ kubernetes_dashboard_namespace }}
+      shell: kubectl create ns {{ kubernetes_dashboard_namespace }}
+      register: result
+      changed_when: "'created' in result.stdout"
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+
     - name: Install kubernetes-dashboard
       shell: |
         helm upgrade -i kubernetes-dashboard /tmp/kubernetes-dashboard-{{ kubernetes_dashboard_version }}.tgz \
