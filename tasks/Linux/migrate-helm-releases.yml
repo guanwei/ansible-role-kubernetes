@@ -3,7 +3,7 @@
     - name: Install 2to3 plugin
       shell: helm plugin install https://github.com/helm/helm-2to3.git
       register: result
-      changed_when: "'Installed plugin: 2to3' in result.stdout"
+      changed_when: "'Installed plugin: 2to3' in result.stderr"
       failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
 
     - name: Get helm v2 releases
@@ -17,7 +17,7 @@
       shell: |
         helm 2to3 convert {{ helm_release }}
       register: result
-      changed_when: "'converted successfully' in result.stdout"
+      changed_when: "'converted successfully' in result.stderr"
       failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
       with_items:
         - "{{ helm_releases.stdout_lines }}"
