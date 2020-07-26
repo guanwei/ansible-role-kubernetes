@@ -22,3 +22,5 @@
       when: helm_releases.stdout != ""
   become: true
   when: helm_current_version.stdout.split('.')[0] > 'v2'
+
+- debug: msg="{{ result }}"
