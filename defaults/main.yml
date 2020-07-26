@@ -30,15 +30,16 @@ kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico
 
 # Helm
 kubernetes_helm_stable_repo_url: https://kubernetes-charts.storage.googleapis.com
+kubernetes_helm_migrate_releases: false
 
 # Kubernetes components
-kubernetes_install_hostpath_provisioner: true
+kubernetes_install_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
 
-kubernetes_install_nginx_ingress: true
+kubernetes_install_nginx_ingress: false
 kubernetes_nginx_ingress_version: 1.41.2
 
-kubernetes_install_metrics_server: true
+kubernetes_install_metrics_server: false
 kubernetes_metrics_server_version: 2.11.1
 
 kubernetes_install_dashboard: false
