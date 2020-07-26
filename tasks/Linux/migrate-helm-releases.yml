@@ -11,6 +11,7 @@
         kubectl get configmap -n kube-system -l "OWNER=TILLER" | awk '{print $1}' | \
           grep -v NAME | cut -d '.' -f1 | uniq
       register: helm_releases
+      changed_when: false
 
     - name: Migrate helm v2 releases in-place to helm v3
       shell: |
