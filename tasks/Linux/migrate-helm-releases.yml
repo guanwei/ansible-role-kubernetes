@@ -2,6 +2,8 @@
 - block:
     - name: Install 2to3 plugin
       shell: helm plugin install https://github.com/helm/helm-2to3.git
+      register: result
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
 
     - name: Migrate helm v2 releases in-place to helm v3
       shell: |
