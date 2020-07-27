@@ -11,6 +11,7 @@ kubernetes_version: latest
 kubernetes_kubeadm_init_extra_opts: ""
 kubernetes_join_command_extra_opts: ""
 
+# Note pod network cidr must be differnt with real interface network cidr.
 kubernetes_pod_network:
   # Flannel CNI.
   cni: "flannel"
