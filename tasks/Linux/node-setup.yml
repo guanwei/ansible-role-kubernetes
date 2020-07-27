@@ -1,6 +1,14 @@
 ---
+- name: Get kubernetes no_proxy variable
+  set_fact:
+    kubernetes_no_proxy: "{{ ansible_env.no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
+  when: ansible_env.no_proxy is defined
+
 - name: Join node to Kubernetes master
   shell: "{{ kubernetes_join_command }}"
   args:
     creates: /etc/kubernetes/kubelet.conf
+  environment:
+    no_proxy: "{{ kubernetes_no_proxy | default(omit) }}"
+    NO_PROXY: "{{ kubernetes_no_proxy | default(omit) }}"
   become: true
