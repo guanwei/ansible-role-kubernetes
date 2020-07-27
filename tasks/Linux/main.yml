@@ -25,8 +25,7 @@
 - name: Set the kubeadm join command globally
   set_fact:
     kubernetes_join_command: >
-      {{ kubernetes_join_command_result.stdout }}
-      {{ kubernetes_join_command_extra_opts }}
+      {{ kubernetes_join_command_result.stdout }} {{ kubernetes_join_command_extra_opts }}
   delegate_to: "{{ host }}"
   delegate_facts: true
   with_items: "{{ groups['all'] }}"
@@ -37,3 +36,7 @@
 - name: Set up node
   include_tasks: node-setup.yml
   when: kubernetes_role == 'node'
+
+- name: Install Kubernetes apps
+  include_tasks: install-kubernetes-apps.yml
+  when: kubernetes_role == 'master'

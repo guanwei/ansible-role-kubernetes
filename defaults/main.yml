@@ -32,7 +32,7 @@ kubernetes_calico_manifest_file: https://docs.projectcalico.org/manifests/calico
 kubernetes_helm_stable_repo_url: https://kubernetes-charts.storage.googleapis.com
 kubernetes_helm_migrate_releases: false
 
-# Kubernetes components
+# Kubernetes apps
 kubernetes_install_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
 

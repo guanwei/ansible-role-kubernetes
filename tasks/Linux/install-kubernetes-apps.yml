@@ -1,0 +1,20 @@
+---
+- name: Install hostpath-provisioner
+  include_tasks: install-hostpath-provisioner.yml
+  when: kubernetes_install_hostpath_provisioner | bool
+
+- name: Install nginx-ingress
+  include_tasks: install-nginx-ingress.yml
+  when: kubernetes_install_nginx_ingress | bool
+
+- name: Install metrics-server
+  include_tasks: install-metrics-server.yml
+  when: kubernetes_install_metrics_server | bool
+
+- name: Install kubernetes-dashboard
+  include_tasks: install-kubernetes-dashboard.yml
+  when: kubernetes_install_dashboard | bool
+
+- name: Install prometheus-operator
+  include_tasks: install-prometheus-operator.yml
+  when: kubernetes_install_prometheus_operator | bool
