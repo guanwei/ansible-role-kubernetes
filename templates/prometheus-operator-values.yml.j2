@@ -1,6 +1,6 @@
 alertmanager:
   alertmanagerSpec:
-{% if kubernetes_install_hostpath_provisioner | bool %}
+{% if (kubernetes_install_hostpath_provisioner | bool) or (kubernetes_install_nfs_client_provisioner | bool) %}
     storage:
       volumeClaimTemplate:
         spec:
@@ -25,7 +25,7 @@ prometheus:
     ruleSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
-{% if kubernetes_install_hostpath_provisioner | bool %}
+{% if (kubernetes_install_hostpath_provisioner | bool) or (kubernetes_install_nfs_client_provisioner | bool) %}
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -55,7 +55,7 @@ grafana:
       - ""
     path: /grafana(/|$)(.*)
   persistence:
-{% if kubernetes_install_hostpath_provisioner | bool %}
+{% if (kubernetes_install_hostpath_provisioner | bool) or (kubernetes_install_nfs_client_provisioner | bool) %}
     enabled: true
     size: 10Gi
 {% else %}
