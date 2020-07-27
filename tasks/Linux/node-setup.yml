@@ -1,0 +1,2 @@
+---
+- debug: msg="{{ kubernetes_join_command }}"
