@@ -1,2 +1,5 @@
 ---
-- debug: msg="{{ kubernetes_join_command }}"
+- name: Join node to Kubernetes master
+  shell: |
+    {{ kubernetes_join_command }}
+  creates: /etc/kubernetes/kubelet.conf
