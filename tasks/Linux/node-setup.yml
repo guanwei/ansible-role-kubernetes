@@ -3,3 +3,4 @@
   shell: |
     {{ kubernetes_join_command }}
   creates: /etc/kubernetes/kubelet.conf
+  become: true
