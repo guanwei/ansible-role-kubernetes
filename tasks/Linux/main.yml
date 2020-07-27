@@ -37,6 +37,10 @@
   include_tasks: node-setup.yml
   when: kubernetes_role == 'node'
 
+- name: Init Helm
+  include_tasks: init-helm.yml
+  when: kubernetes_role == 'master'
+
 - name: Install Kubernetes apps
   include_tasks: install-kubernetes-apps.yml
   when: kubernetes_role == 'master'
