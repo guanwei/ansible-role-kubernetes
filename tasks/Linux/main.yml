@@ -27,10 +27,12 @@
     kubernetes_join_command: >
       {{ kubernetes_join_command_result.stdout }}
       {{ kubernetes_join_command_extra_opts }}
-  when: kubernetes_join_command_result.stdout is defined
-  delegate_to: "{{ item }}"
+  delegate_to: "{{ host }}"
   delegate_facts: true
   with_items: "{{ groups['all'] }}"
+  loop_control:
+    loop_var: host
+  when: kubernetes_join_command_result.stdout is defined
 
 - name: Set up node
   include_tasks: node-setup.yml
