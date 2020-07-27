@@ -3,6 +3,10 @@
   include_tasks: install-hostpath-provisioner.yml
   when: kubernetes_install_hostpath_provisioner | bool
 
+- name: Install nfs-client-provisioner
+  include_tasks: install-nfs-client-provisioner.yml
+  when: kubernetes_install_nfs_client_provisioner | bool
+
 - name: Install nginx-ingress
   include_tasks: install-nginx-ingress.yml
   when: kubernetes_install_nginx_ingress | bool
