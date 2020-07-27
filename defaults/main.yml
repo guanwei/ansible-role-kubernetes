@@ -36,6 +36,11 @@ kubernetes_helm_migrate_releases: false
 kubernetes_install_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
 
+kubernetes_install_nfs_client_provisioner: false
+kubernetes_nfs_client_provisioner_version: 1.2.8
+kubernetes_nfs_server: nfs-server
+kubernetes_nfs_path: /ifs/kubernetes
+
 kubernetes_install_nginx_ingress: false
 kubernetes_nginx_ingress_version: 1.41.2
 
