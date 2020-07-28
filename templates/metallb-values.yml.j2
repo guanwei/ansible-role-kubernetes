@@ -3,4 +3,4 @@ configInline:
   - name: default
     protocol: layer2
     addresses:
-    - {{ kubernetes_apiserver_advertise_address | default(ansible_default_ipv4.address, true) }}
+    - {{ kubernetes_apiserver_advertise_address | default(ansible_default_ipv4.address, true) }}/32
