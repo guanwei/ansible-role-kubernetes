@@ -1,0 +1,28 @@
+---
+- name: Check if metallb is installed
+  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^metallb\s' | wc -l
+  register: install_status
+  changed_when: false
+  become: true
+
+- block:
+    - name: Download metallb chart
+      shell: helm fetch stable/metallb --version {{ kubernetes_metallb_version }} -d /tmp
+
+    - name: Copy metallb vlaues file
+      template:
+        src: metallb-values.yml.j2
+        dest: /tmp/metallb-values.yml
+
+    - name: Install metallb
+      shell: |
+        helm upgrade -i metallb /tmp/metallb-{{ kubernetes_metallb_version }}.tgz \
+          -f /tmp/metallb-values.yml \
+          --namespace kube-system --force
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
+  become: true
+  when: install_status.stdout == '0'
