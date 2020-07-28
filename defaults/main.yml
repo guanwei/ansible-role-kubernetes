@@ -58,4 +58,7 @@ kubernetes_dashboard_namespace: kube-ops
 kubernetes_install_prometheus_operator: false
 kubernetes_prometheus_operator_version: 9.0.1
 kubernetes_prometheus_operator_namespace: kube-ops
-kubernetes_grafana_admin_password: admin
+kubernetes_prometheus_alertmanager_persistence_size: 50Gi
+kubernetes_prometheus_server_persistence_size: 50Gi
+kubernetes_prometheus_grafana_persistence_size: 10Gi
+kubernetes_prometheus_grafana_admin_password: admin

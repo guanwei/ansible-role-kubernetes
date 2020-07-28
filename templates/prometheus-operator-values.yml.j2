@@ -6,7 +6,7 @@ alertmanager:
         spec:
           resources:
             requests:
-              storage: 50Gi
+              storage: {{ kubernetes_prometheus_alertmanager_persistence_size }}
 {% else %}
     storage: {}
 {% endif %}
@@ -31,7 +31,7 @@ prometheus:
         spec:
           resources:
             requests:
-              storage: 50Gi
+              storage: {{ kubernetes_prometheus_server_persistence_size }}
 {% else %}
     storageSpec: {}
 {% endif %}
@@ -44,7 +44,7 @@ prometheus:
       - /prometheus(/|$)(.*)
 
 grafana:
-  adminPassword: {{ kubernetes_grafana_admin_password }}
+  adminPassword: {{ kubernetes_prometheus_grafana_admin_password }}
   env:
     GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s/grafana"
   ingress:
@@ -57,7 +57,7 @@ grafana:
   persistence:
 {% if (kubernetes_install_hostpath_provisioner | bool) or (kubernetes_install_nfs_client_provisioner | bool) %}
     enabled: true
-    size: 10Gi
+    size: {{ kubernetes_prometheus_grafana_persistence_size }}
 {% else %}
     enabled: false
 {% endif %}
