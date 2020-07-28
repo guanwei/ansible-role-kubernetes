@@ -1,0 +1,22 @@
+---
+- name: Check if hostpath-provisioner is installed
+  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^hostpath-provisioner\s' | wc -l
+  register: install_status
+  changed_when: false
+  become: true
+
+- block:
+    - name: Download hostpath-provisioner chart
+      shell: helm fetch rimusz/hostpath-provisioner --version {{ kubernetes_hostpath_provisioner_version }} -d /tmp
+
+    - name: Install hostpath-provisioner
+      shell: |
+        helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-{{ kubernetes_hostpath_provisioner_version }}.tgz \
+          --namespace kube-system --force --wait
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
+  become: true
+  when: install_status.stdout == '0'

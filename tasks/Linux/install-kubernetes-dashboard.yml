@@ -1,0 +1,49 @@
+---
+- name: Check if kubernetes-dashboard is installed
+  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^kubernetes-dashboard\s' | wc -l
+  register: install_status
+  changed_when: false
+  become: true
+
+- block:
+    - name: Download kubernetes-dashboard chart
+      shell: helm fetch kubernetes-dashboard/kubernetes-dashboard --version {{ kubernetes_dashboard_version }} -d /tmp
+
+    - name: Copy kubernetes-dashboard vlaues file
+      template:
+        src: kubernetes-dashboard-values.yml.j2
+        dest: /tmp/kubernetes-dashboard-values.yml
+
+    - name: Create namespace {{ kubernetes_dashboard_namespace }}
+      shell: kubectl create ns {{ kubernetes_dashboard_namespace }}
+      register: result
+      changed_when: "'created' in result.stdout"
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+
+    - name: Install kubernetes-dashboard
+      shell: |
+        helm upgrade -i kubernetes-dashboard /tmp/kubernetes-dashboard-{{ kubernetes_dashboard_version }}.tgz \
+          -f /tmp/kubernetes-dashboard-values.yml \
+          --namespace {{ kubernetes_dashboard_namespace }} --force
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
+
+    - name: Create serviceaccount kubernetes-dashboard-admin-user
+      shell: kubectl -n {{ kubernetes_dashboard_namespace }} create sa kubernetes-dashboard-admin-user
+      register: result
+      changed_when: "'created' in result.stdout"
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+
+    - name: Create clusterrolebinding kubernetes-dashboard-admin-user
+      shell: |
+        kubectl create clusterrolebinding kubernetes-dashboard-admin-user \
+          --clusterrole=cluster-admin \
+          --serviceaccount={{ kubernetes_dashboard_namespace }}:kubernetes-dashboard-admin-user
+      register: result
+      changed_when: "'created' in result.stdout"
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+  become: true
+  when: install_status.stdout == '0'
