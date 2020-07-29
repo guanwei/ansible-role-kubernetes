@@ -128,7 +128,7 @@ None.
 requirements.yml
 ```
 - name: kubernetes
-  src: https://github.com/guanwei/ansible-role-kubernetes.git
+  src: ssh://tfsemea1.ta.philips.com:22/tfs/TPC_Region27/CDI_PT/_git/ansible-role-kubernetes
   version: dev
   scm: git
 ```
