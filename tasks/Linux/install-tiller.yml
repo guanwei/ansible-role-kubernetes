@@ -14,5 +14,8 @@
   become: true
 
 - name: Install or upgrade tiller
-  shell: helm init --service-account=tiller --history-max 300 --tiller-connection-timeout 600 --upgrade --wait
+  shell: |
+    helm init --service-account=tiller \
+      {% if kubernetes_helm_tiller_repo is defined %} -i {{ kubernetes_helm_tiller_repo }}/tiller:{{ helm_current_version }}{% endif %} \
+      --history-max 300 --tiller-connection-timeout 600 --upgrade --wait
   become: true
