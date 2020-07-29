@@ -85,7 +85,8 @@ if your server have more than one network card，you should set `kubernetes_apis
 
 if set `kubernetes_version` to `latest`, it will get the version from `https://storage.googleapis.com/kubernetes-release/release/stable.txt`, but if you are in china, you should be blocked, consider specific kubernetes version like `1.18.6`.
 
-extra args for kubeadm init can be set in `kubernetes_kubeadm_init_extra_opts`. If you want pull k8s images from other docker repo set it as `--image-repository googlecontainersmirrors`.
+extra args for kubeadm init can be set in `kubernetes_kubeadm_init_extra_opts`. If you want pull k8s images from other docker repo set it as `--image-repository registry.cn-hangzhou.aliyuncs.com/google_containers`. 
+> Becareful some new version k8s images may not exist in these repos.
 
 `kubernetes_pod_network` can choice `flannel` or `calico` network model.
 
