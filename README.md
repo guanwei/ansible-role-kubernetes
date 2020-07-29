@@ -90,7 +90,6 @@ if set `kubernetes_version` to `latest`, it will get the version from `https://s
 extra args for kubeadm init can be set in `kubernetes_kubeadm_init_extra_opts`. If you want pull k8s images from other docker repo set it as `--image-repository registry.cn-hangzhou.aliyuncs.com/google_containers`. 
 > Becareful some new version k8s images may not exist in these repos.
 
-
 `kubernetes_pod_network` can choice `flannel` or `calico` network model.
 
 if you only have one machine to run k8s, you should set `kubernetes_allow_pods_on_master` to `true`, default is `true`.
