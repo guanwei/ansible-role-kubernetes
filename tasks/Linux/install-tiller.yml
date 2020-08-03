@@ -1,0 +1,21 @@
+---
+- name: Create tiller serviceaccount
+  shell: kubectl create sa --namespace kube-system tiller
+  register: result
+  changed_when: "'created' in result.stdout"
+  failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+  become: true
+
+- name: Create tiller clusterrolebinding
+  shell: kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+  register: result
+  changed_when: "'created' in result.stdout"
+  failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+  become: true
+
+- name: Install or upgrade tiller
+  shell: |
+    helm init --service-account=tiller \
+      {% if kubernetes_helm_tiller_repo is defined %} -i {{ kubernetes_helm_tiller_repo }}/tiller:{{ helm_current_version }}{% endif %} \
+      --history-max 300 --tiller-connection-timeout 600 --upgrade --wait
+  become: true
