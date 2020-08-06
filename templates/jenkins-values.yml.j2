@@ -34,6 +34,9 @@ master:
 {{ kubernetes_jenkins_install_plugins | to_nice_yaml | indent(4, true) }}
   JCasC:
     configScripts:
+{% if kubernetes_jenkins_casc_scripts | length > 0 %}
+{{ kubernetes_jenkins_casc_scripts | to_nice_yaml | indent(6, true) }}
+{% else %}
       system-config: |
         jenkins:
           systemMessage: Welcome to our CI\CD server.
@@ -42,10 +45,11 @@ master:
       proxy: |
         jenkins:
           proxy:
-            name: "{{ ansible_env.http_proxy | urlsplit('hostname') }}"
+            name: {{ ansible_env.http_proxy | urlsplit('hostname') }}
             port: {{ ansible_env.http_proxy | urlsplit('port') }}
-            noProxyHost: "{{ ansible_env.no_proxy }}"
-            testUrl: "https://www.jenkins.io"
+            noProxyHost: {{ ansible_env.no_proxy }}
+            testUrl: https://www.jenkins.io
+{% endif %}
 {% endif %}
   slaveJenkinsUrl: http://jenkins:8080
   ingress:

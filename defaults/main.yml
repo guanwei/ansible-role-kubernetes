@@ -67,6 +67,7 @@ kubernetes_prometheus_grafana_persistence_size: 10Gi
 kubernetes_prometheus_grafana_admin_password: admin
 
 kubernetes_install_jenkins: false
+kubernetes_upgrade_jenkins: false
 kubernetes_jenkins_version: 2.5.0
 kubernetes_jenkins_namespace: kube-ops
 kubernetes_jenkins_admin_user: admin
@@ -91,3 +92,4 @@ kubernetes_jenkins_install_plugins:
   - rebuild:1.31
   - windows-slaves:1.6
   - ssh-agent:1.20
+kubernetes_jenkins_casc_scripts: {}
