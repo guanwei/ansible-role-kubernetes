@@ -31,4 +31,4 @@
       debug:
         msg: "{{ install_result.stdout_lines }}"
   become: true
-  when: install_status.stdout == '0'
+  when: (install_status.stdout == '0') or (kubernetes_upgrade_jenkins | bool)
