@@ -16,7 +16,7 @@ master:
 {% if ansible_env.no_proxy is defined %}
     - name: no_proxy
       value: {{ ansible_env.no_proxy }}
-{% if endif %}
+{% endif %}
   containerEnv:
 {% if ansible_env.http_proxy is defined %}
     - name: http_proxy
