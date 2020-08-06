@@ -31,7 +31,7 @@ master:
       value: {{ ansible_env.no_proxy }}
 {% endif %}
   installPlugins:
-{{ kubernetes_jenkins_install_plugins | to_nice_yaml(indent=4) }}
+{{ kubernetes_jenkins_install_plugins | to_nice_yaml | indent(4, true) }}
   JCasC:
     configScripts:
       system-config: |
