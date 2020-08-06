@@ -22,3 +22,7 @@
 - name: Install prometheus-operator
   include_tasks: install-prometheus-operator.yml
   when: kubernetes_install_prometheus_operator | bool
+
+- name: Install jenkins
+  include_tasks: install-jenkins.yml
+  when: kubernetes_install_jenkins | bool

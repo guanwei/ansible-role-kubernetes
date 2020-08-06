@@ -1,0 +1,34 @@
+---
+- name: Check if jenkins is installed
+  shell: helm list --deployed {% if helm_current_version.stdout.split('.')[0] != 'v2' %}--all-namespaces{% endif %} | grep '^jenkins\s' | wc -l
+  register: install_status
+  changed_when: false
+  become: true
+
+- block:
+    - name: Create namespace {{ kubernetes_jenkins_namespace }}
+      shell: kubectl create ns {{ kubernetes_jenkins_namespace }}
+      register: result
+      changed_when: "'created' in result.stdout"
+      failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
+
+    - name: Download jenkins chart
+      shell: helm fetch stable/jenkins --version {{ kubernetes_jenkins_version }} -d /tmp
+
+    - name: Copy jenkins vlaues file
+      template:
+        src: jenkins-values.yml.j2
+        dest: /tmp/jenkins-values.yml
+
+    - name: Install jenkins
+      shell: |
+        helm upgrade -i jenkins /tmp/jenkins-{{ kubernetes_jenkins_version }}.tgz \
+          -f /tmp/jenkins-values.yml \
+          --namespace {{ kubernetes_jenkins_namespace }} --force
+      register: install_result
+
+    - name: Print the install output to screen
+      debug:
+        msg: "{{ install_result.stdout_lines }}"
+  become: true
+  when: install_status.stdout == '0'
