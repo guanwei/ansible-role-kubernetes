@@ -1,0 +1,57 @@
+master:
+  adminUser: admin
+  adminPassword: admin
+  jenkinsAdminEmail: admin@jenkins.io
+  jenkinsUriPrefix: "/jenkins"
+  enableRawHtmlMarkupFormatter: true
+  initContainerEnv:
+{% if ansible_env.http_proxy is defined %}
+    - name: http_proxy
+      value: {{ ansible_env.http_proxy }}
+{% endif %}
+{% if ansible_env.https_proxy is defined %}
+    - name: https_proxy
+      value: {{ ansible_env.https_proxy }}
+{% endif %}
+{% if ansible_env.no_proxy is defined %}
+    - name: no_proxy
+      value: {{ ansible_env.no_proxy }}
+{% if endif %}
+  containerEnv:
+{% if ansible_env.http_proxy is defined %}
+    - name: http_proxy
+      value: {{ ansible_env.http_proxy }}
+{% endif %}
+{% if ansible_env.https_proxy is defined %}
+    - name: https_proxy
+      value: {{ ansible_env.https_proxy }}
+{% endif %}
+{% if ansible_env.no_proxy is defined %}
+    - name: no_proxy
+      value: {{ ansible_env.no_proxy }}
+{% endif %}
+  installPlugins:
+    {{ kubernetes_jenkins_install_plugins | to_yaml }}
+  JCasC:
+    configScripts:
+      system-config: |
+        jenkins:
+          systemMessage: Welcome to our CI\CD server.
+          scmCheckoutRetryCount: 2
+{% if ansible_env.http_proxy is defined %}
+      proxy: |
+        jenkins:
+          proxy:
+            name: "{{ ansible_env.http_proxy | urlsplit('hostname') }}"
+            port: {{ ansible_env.http_proxy | urlsplit('port') }}
+            noProxyHost: "{{ ansible_env.no_proxy }}"
+            testUrl: "https://www.jenkins.io"
+{% endif %}
+  slaveJenkinsUrl: http://jenkins:8080
+  ingress:
+    enabled: true
+    path: "/jenkins"
+  testEnabled: false
+sidecars:
+  configAutoReload:
+    enabled: true

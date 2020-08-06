@@ -65,3 +65,27 @@ kubernetes_prometheus_alertmanager_persistence_size: 50Gi
 kubernetes_prometheus_server_persistence_size: 50Gi
 kubernetes_prometheus_grafana_persistence_size: 10Gi
 kubernetes_prometheus_grafana_admin_password: admin
+
+kubernetes_install_jenkins: false
+kubernetes_jenkins_version: 2.5.0
+kubernetes_jenkins_namespace: kube-ops
+kubernetes_jenkins_install_plugins:
+  - kubernetes:1.26.4
+  - workflow-aggregator:2.6
+  - credentials-binding:1.23
+  - git:4.3.0
+  - configuration-as-code:1.42
+  - job-dsl:1.77
+  - active-directory:2.16
+  - matrix-auth:2.6.2
+  - ssh-slaves:1.31.2
+  - antisamy-markup-formatter:2.1
+  - ansicolor:0.7.1
+  - timestamper:1.11.4
+  - prometheus:2.0.7
+  - maven-plugin:3.7
+  - git-parameter:0.9.12
+  - config-file-provider:3.6.3
+  - rebuild:1.31
+  - windows-slaves:1.6
+  - ssh-agent:1.20
