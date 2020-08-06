@@ -69,6 +69,8 @@ kubernetes_prometheus_grafana_admin_password: admin
 kubernetes_install_jenkins: false
 kubernetes_jenkins_version: 2.5.0
 kubernetes_jenkins_namespace: kube-ops
+kubernetes_jenkins_admin_user: admin
+kubernetes_jenkins_admin_password: admin
 kubernetes_jenkins_install_plugins:
   - kubernetes:1.26.4
   - workflow-aggregator:2.6

@@ -1,6 +1,6 @@
 master:
-  adminUser: admin
-  adminPassword: admin
+  adminUser: {{ kubernetes_jenkins_admin_user }}
+  adminPassword: {{ kubernetes_jenkins_admin_password }}
   jenkinsAdminEmail: admin@jenkins.io
   jenkinsUriPrefix: "/jenkins"
   enableRawHtmlMarkupFormatter: true
