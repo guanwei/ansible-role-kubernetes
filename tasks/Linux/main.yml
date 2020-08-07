@@ -12,7 +12,7 @@
     path: /etc/kubernetes/admin.conf
   register: kubernetes_init_stat
 
-- name: Set up master
+- name: Set up Kubernetes master
   include_tasks: master-setup.yml
   when: kubernetes_role == 'master'
 
@@ -33,7 +33,7 @@
     loop_var: host
   when: kubernetes_join_command_result.stdout is defined
 
-- name: Set up node
+- name: Set up Kubernetes node
   include_tasks: node-setup.yml
   when: kubernetes_role == 'node'
 

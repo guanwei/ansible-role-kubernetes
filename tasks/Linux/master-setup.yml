@@ -1,5 +1,5 @@
 ---
-- name: Get kubernetes no_proxy variable
+- name: Get Kubernetes no_proxy variable
   set_fact:
     kubernetes_no_proxy: "{{ ansible_env.no_proxy.split(',') | union(['127.0.0.0/8','10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']) | join(',') }}"
   when: ansible_env.no_proxy is defined
@@ -69,7 +69,7 @@
   when: kubernetes_pod_network.cni == 'calico'
   become: true
 
-- name: Allow pods on master node (if configured)
+- name: Allow pods on Kubernetes master node (if configured)
   command: kubectl taint nodes --all node-role.kubernetes.io/master-
   when:
     - kubernetes_allow_pods_on_master | bool
