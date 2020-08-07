@@ -53,30 +53,69 @@ kubernetes_helm_migrate_releases: false
 
 ## hostpath_provisioner should be installed only for one machine k8s cluster.
 kubernetes_install_hostpath_provisioner: false
+kubernetes_upgrade_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
+kubernetes_hostpath_set_default_storage_class: true
+kubernetes_hostpath_path: /mnt/hostpath
 
 kubernetes_install_nfs_client_provisioner: false
+kubernetes_upgrade_nfs_client_provisioner: false
 kubernetes_nfs_client_provisioner_version: 1.2.8
+kubernetes_nfs_client_set_default_storage_class: true
 kubernetes_nfs_server: nfs-server
 kubernetes_nfs_path: /ifs/kubernetes
 
 kubernetes_install_nginx_ingress: false
+kubernetes_upgrade_nginx_ingress: false
 kubernetes_nginx_ingress_version: 1.41.2
+kubernetes_nginx_ingress_external_ips:
+  - "{{ kubernetes_apiserver_advertise_address | default(ansible_default_ipv4.address, true) }}"
 
 kubernetes_install_metrics_server: false
+kubernetes_upgrade_metrics_server: false
 kubernetes_metrics_server_version: 2.11.1
 
 kubernetes_install_dashboard: false
+kubernetes_upgrade_dashboard: false
 kubernetes_dashboard_version: 2.3.0
 kubernetes_dashboard_namespace: kube-ops
 
 kubernetes_install_prometheus_operator: false
+kubernetes_upgrade_prometheus_operator: false
 kubernetes_prometheus_operator_version: 9.0.1
 kubernetes_prometheus_operator_namespace: kube-ops
 kubernetes_prometheus_alertmanager_persistence_size: 50Gi
 kubernetes_prometheus_server_persistence_size: 50Gi
 kubernetes_prometheus_grafana_persistence_size: 10Gi
 kubernetes_prometheus_grafana_admin_password: admin
+
+kubernetes_install_jenkins: false
+kubernetes_upgrade_jenkins: false
+kubernetes_jenkins_version: 2.5.0
+kubernetes_jenkins_namespace: kube-ops
+kubernetes_jenkins_admin_user: admin
+kubernetes_jenkins_admin_password: admin
+kubernetes_jenkins_install_plugins:
+  - kubernetes:1.26.4
+  - workflow-aggregator:2.6
+  - credentials-binding:1.23
+  - git:4.3.0
+  - configuration-as-code:1.42
+  - job-dsl:1.77
+  - active-directory:2.16
+  - matrix-auth:2.6.2
+  - ssh-slaves:1.31.2
+  - antisamy-markup-formatter:2.1
+  - ansicolor:0.7.1
+  - timestamper:1.11.4
+  - prometheus:2.0.7
+  - maven-plugin:3.7
+  - git-parameter:0.9.12
+  - config-file-provider:3.6.3
+  - rebuild:1.31
+  - windows-slaves:1.6
+  - ssh-agent:1.20
+kubernetes_jenkins_casc_scripts: {}
 ```
 
 if you want use aliyun apt repo, you can set `kubernetes_apt_key` to `https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg` and set `kubernetes_apt_repository` to `deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main`.
