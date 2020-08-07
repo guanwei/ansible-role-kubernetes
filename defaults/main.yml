@@ -41,10 +41,15 @@ kubernetes_helm_migrate_releases: false
 
 ## hostpath_provisioner should be installed only for one machine k8s cluster.
 kubernetes_install_hostpath_provisioner: false
+kubernetes_upgrade_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
+kubernetes_hostpath_set_default_storage_class: true
+kubernetes_hostpath_path: /mnt/hostpath
 
 kubernetes_install_nfs_client_provisioner: false
+kubernetes_upgrade_nfs_client_provisioner: false
 kubernetes_nfs_client_provisioner_version: 1.2.8
+kubernetes_nfs_client_set_default_storage_class: true
 kubernetes_nfs_server: nfs-server
 kubernetes_nfs_path: /ifs/kubernetes
 
@@ -54,13 +59,16 @@ kubernetes_nginx_ingress_version: 1.41.2
 kubernetes_nginx_ingress_external_ips: []
 
 kubernetes_install_metrics_server: false
+kubernetes_upgrade_metrics_server: false
 kubernetes_metrics_server_version: 2.11.1
 
 kubernetes_install_dashboard: false
+kubernetes_upgrade_dashboard: false
 kubernetes_dashboard_version: 2.3.0
 kubernetes_dashboard_namespace: kube-ops
 
 kubernetes_install_prometheus_operator: false
+kubernetes_upgrade_prometheus_operator: false
 kubernetes_prometheus_operator_version: 9.0.1
 kubernetes_prometheus_operator_namespace: kube-ops
 kubernetes_prometheus_alertmanager_persistence_size: 50Gi
