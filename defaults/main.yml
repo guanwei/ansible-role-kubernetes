@@ -56,7 +56,8 @@ kubernetes_nfs_path: /ifs/kubernetes
 kubernetes_install_nginx_ingress: false
 kubernetes_upgrade_nginx_ingress: false
 kubernetes_nginx_ingress_version: 1.41.2
-kubernetes_nginx_ingress_external_ips: []
+kubernetes_nginx_ingress_external_ips:
+  - "{{ kubernetes_apiserver_advertise_address | default(ansible_default_ipv4.address, true) }}"
 
 kubernetes_install_metrics_server: false
 kubernetes_upgrade_metrics_server: false

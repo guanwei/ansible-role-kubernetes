@@ -2,8 +2,4 @@ controller:
   service:
     type: ClusterIP
     externalIPs:
-{% if kubernetes_nginx_ingress_external_ips | length > 0 %}
       {{ kubernetes_nginx_ingress_external_ips | to_nice_yaml | indent(6) }}
-{% else %}
-      - {{ kubernetes_apiserver_advertise_address | default(ansible_default_ipv4.address, true) }}
-{% endif %}
