@@ -115,7 +115,11 @@ kubernetes_jenkins_install_plugins:
   - rebuild:1.31
   - windows-slaves:1.6
   - ssh-agent:1.20
-kubernetes_jenkins_casc_scripts: {}
+kubernetes_jenkins_casc_scripts:
+  system-config: |
+    jenkins:
+      systemMessage: Welcome to our CI\CD server.
+      scmCheckoutRetryCount: 2
 ```
 
 if you want use aliyun apt repo, you can set `kubernetes_apt_key` to `https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg` and set `kubernetes_apt_repository` to `deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main`.
