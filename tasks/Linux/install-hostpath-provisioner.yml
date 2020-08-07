@@ -9,9 +9,15 @@
     - name: Download hostpath-provisioner chart
       shell: helm fetch rimusz/hostpath-provisioner --version {{ kubernetes_hostpath_provisioner_version }} -d /tmp
 
+    - name: Copy hostpath-provisioner vlaues file
+      template:
+        src: hostpath-provisioner-values.yml.j2
+        dest: /tmp/hostpath-provisioner-values.yml
+
     - name: Install hostpath-provisioner
       shell: |
         helm upgrade -i hostpath-provisioner /tmp/hostpath-provisioner-{{ kubernetes_hostpath_provisioner_version }}.tgz \
+          -f /tmp/hostpath-provisioner-values.yml \
           --namespace kube-system --force --wait
       register: install_result
 
@@ -19,4 +25,4 @@
       debug:
         msg: "{{ install_result.stdout_lines }}"
   become: true
-  when: install_status.stdout == '0'
+  when: (install_status.stdout == '0') or (kubernetes_upgrade_hostpath_provisioner | bool)

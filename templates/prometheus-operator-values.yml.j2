@@ -4,6 +4,11 @@ alertmanager:
     storage:
       volumeClaimTemplate:
         spec:
+{% if kubernetes_install_nfs_client_provisioner | bool %}
+          storageClassName: nfs-client
+{% elif kubernetes_install_hostpath_provisioner | bool %}
+          storageClassName: hostpath
+{% endif %}
           resources:
             requests:
               storage: {{ kubernetes_prometheus_alertmanager_persistence_size }}
@@ -29,6 +34,11 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
+{% if kubernetes_install_nfs_client_provisioner | bool %}
+          storageClassName: nfs-client
+{% elif kubernetes_install_hostpath_provisioner | bool %}
+          storageClassName: hostpath
+{% endif %}
           resources:
             requests:
               storage: {{ kubernetes_prometheus_server_persistence_size }}
@@ -57,6 +67,11 @@ grafana:
   persistence:
 {% if (kubernetes_install_hostpath_provisioner | bool) or (kubernetes_install_nfs_client_provisioner | bool) %}
     enabled: true
+{% if kubernetes_install_nfs_client_provisioner | bool %}
+    storageClassName: nfs-client
+{% elif kubernetes_install_hostpath_provisioner | bool %}
+    storageClassName: hostpath
+{% endif %}
     size: {{ kubernetes_prometheus_grafana_persistence_size }}
 {% else %}
     enabled: false

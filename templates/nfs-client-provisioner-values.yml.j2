@@ -2,4 +2,4 @@ nfs:
   server: {{ kubernetes_nfs_server }}
   path: {{ kubernetes_nfs_path }}
 storageClass:
-  defaultClass: true
+  defaultClass: {{ kubernetes_nfs_client_set_default_storage_class }}

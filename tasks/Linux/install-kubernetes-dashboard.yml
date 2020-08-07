@@ -46,4 +46,4 @@
       changed_when: "'created' in result.stdout"
       failed_when: "result.rc != 0 and 'already exists' not in result.stderr"
   become: true
-  when: install_status.stdout == '0'
+  when: (install_status.stdout == '0') or (kubernetes_upgrade_dashboard | bool)
