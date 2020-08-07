@@ -148,6 +148,7 @@ nginx_ingress
 metrics_server
 kubernetes_dashboard
 prometheus_operator
+jenkins
 ```
 
 you can access kubernetes_dashboard by `http://<ingress_external_ip>/kubernetes-dashboard`.
@@ -157,6 +158,8 @@ you can access prometheus server by `http://<ingress_external_ip>/prometheus`.
 you can access prometheus alertmanager by `http://<ingress_external_ip>/alertmanager`.
 
 you can access grafana by `http://<ingress_external_ip>/grafana`.
+
+you can access jenkins by `http://<ingress_external_ip>/jenkins`.
 
 ## Dependencies
 
