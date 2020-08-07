@@ -35,7 +35,7 @@ master:
   JCasC:
     configScripts:
 {% if kubernetes_jenkins_casc_scripts | length > 0 %}
-{{ kubernetes_jenkins_casc_scripts | to_nice_yaml | indent(6, true) }}
+      {{ kubernetes_jenkins_casc_scripts | to_nice_yaml | indent(6) }}
 {% else %}
       system-config: |
         jenkins:
