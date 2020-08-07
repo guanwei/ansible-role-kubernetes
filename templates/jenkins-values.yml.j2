@@ -59,3 +59,14 @@ master:
 sidecars:
   configAutoReload:
     enabled: true
+persistence:
+{% if (kubernetes_install_hostpath_provisioner | bool) or (kubernetes_install_nfs_client_provisioner | bool) %}
+  enabled: true
+{% if kubernetes_install_nfs_client_provisioner | bool %}
+  storageClass: nfs-client
+{% elif kubernetes_install_hostpath_provisioner | bool %}
+  storageClass: hostpath
+{% endif %}
+{% else %}
+  enabled: false
+{% endif %}
