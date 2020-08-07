@@ -55,13 +55,13 @@ kubernetes_helm_migrate_releases: false
 kubernetes_install_hostpath_provisioner: false
 kubernetes_upgrade_hostpath_provisioner: false
 kubernetes_hostpath_provisioner_version: 0.2.9
-kubernetes_hostpath_set_default_storage_class: true
+kubernetes_hostpath_is_default_storage_class: true
 kubernetes_hostpath_path: /mnt/hostpath
 
 kubernetes_install_nfs_client_provisioner: false
 kubernetes_upgrade_nfs_client_provisioner: false
 kubernetes_nfs_client_provisioner_version: 1.2.8
-kubernetes_nfs_client_set_default_storage_class: true
+kubernetes_nfs_client_is_default_storage_class: true
 kubernetes_nfs_server: nfs-server
 kubernetes_nfs_path: /ifs/kubernetes
 
