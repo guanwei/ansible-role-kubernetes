@@ -35,7 +35,6 @@ master:
   JCasC:
     configScripts:
       {{ kubernetes_jenkins_casc_scripts | to_nice_yaml | indent(6) }}
-  slaveJenkinsUrl: http://jenkins:8080
   ingress:
     enabled: true
     path: "/jenkins"
