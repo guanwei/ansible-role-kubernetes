@@ -2,7 +2,8 @@ master:
   adminUser: {{ kubernetes_jenkins_admin_user }}
   adminPassword: {{ kubernetes_jenkins_admin_password }}
   jenkinsAdminEmail: admin@jenkins.io
-  jenkinsUriPrefix: "/jenkins"
+  jenkinsUrl: http://{{ kubernetes_nginx_ingress_external_ips[0] }}/jenkins
+  jenkinsUriPrefix: /jenkins
   enableRawHtmlMarkupFormatter: true
   initContainerEnv:
 {% if ansible_env.http_proxy is defined %}
