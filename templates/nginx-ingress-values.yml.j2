@@ -3,3 +3,14 @@ controller:
     type: ClusterIP
     externalIPs:
       {{ kubernetes_nginx_ingress_external_ips | to_nice_yaml | indent(6) }}
+{% if kubernetes_nginx_ingress_tcp | length > 0 %}
+tcp:
+  {{ kubernetes_nginx_ingress_tcp | to_nice_yaml | indent(2) }}
+{% else if kubernetes_install_jenkins | bool %}
+tcp:
+  50000: "{{ kubernetes_jenkins_namespace }}/jenkins-agent:50000"
+{% endif %}
+{% if kubernetes_nginx_ingress_udp | length > 0 %}
+udp:
+  {{ kubernetes_nginx_ingress_udp | to_nice_yaml | indent(2) }}
+{% endif %}
