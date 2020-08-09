@@ -6,7 +6,7 @@ controller:
 {% if kubernetes_nginx_ingress_tcp | length > 0 %}
 tcp:
   {{ kubernetes_nginx_ingress_tcp | to_nice_yaml | indent(2) }}
-{% else if kubernetes_install_jenkins | bool %}
+{% elif kubernetes_install_jenkins | bool %}
 tcp:
   50000: "{{ kubernetes_jenkins_namespace }}/jenkins-agent:50000"
 {% endif %}
