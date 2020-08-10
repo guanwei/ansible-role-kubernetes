@@ -115,7 +115,7 @@ kubernetes_jenkins_install_plugins:
   - rebuild:1.31
   - windows-slaves:1.6
   - ssh-agent:1.20
-kubernetes_jenkins_casc_scripts:
+kubernetes_jenkins_casc_configs:
   system-config: |
     jenkins:
       systemMessage: Welcome to our CI\CD server.

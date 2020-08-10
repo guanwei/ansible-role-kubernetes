@@ -35,7 +35,7 @@ master:
     {{ kubernetes_jenkins_install_plugins | to_nice_yaml | indent(4) }}
   JCasC:
     configScripts:
-      {{ kubernetes_jenkins_casc_scripts | to_nice_yaml | indent(6) }}
+      {{ kubernetes_jenkins_casc_configs | to_nice_yaml | indent(6) }}
   ingress:
     enabled: true
     path: "/jenkins"
