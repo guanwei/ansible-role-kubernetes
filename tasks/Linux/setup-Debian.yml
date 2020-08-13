@@ -4,6 +4,7 @@
     name:
       - apt-transport-https
       - curl
+      - nfs-common
     state: present
   become: true
 
